@@ -1,3 +1,5 @@
+import os.path
+
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
@@ -26,10 +28,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 		clients.sendJson(db.posts.find())
 
 
-app = tornado.web.Application([
-	(r"/", IndexHandler),
-	(r"/ws", WebSocketHandler),
-])
+app = tornado.web.Application(
+	[
+		(r"/", IndexHandler),
+		(r"/ws", WebSocketHandler),
+	],
+		template_path = os.path.join(os.getcwd(), 'template'),
+		static_path = os.path.join(os.getcwd(), 'static'),
+	)
 
 
 if __name__ == "__main__":
