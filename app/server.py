@@ -19,11 +19,12 @@ class DebugHandler(tornado.web.RequestHandler):
 class IndexHandler(tornado.web.RequestHandler):
 	@tornado.web.asynchronous
 	def get(self):
-		self.render('index.html')
+		self.render('index.html', personId = self.get_argument('personId'))
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
 	def open(self):
+		self.personId = self.get_argument('personId')
 		clients.append(self)
 
 
@@ -34,7 +35,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 	def on_message(self, request):
 		model = dispatcher.getModel(request)
 		response = model.call()
-		clients.send(response)
+		clients.send(request, response)
 
 
 app = tornado.web.Application(

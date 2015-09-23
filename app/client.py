@@ -1,3 +1,6 @@
+from bson.json_util import loads
+
+
 class Clients:
 	def __init__(self):
 		self.vals = []
@@ -13,6 +16,10 @@ class Clients:
 			self.vals.remove(val)
 
 
-	def send(self, response):
-		for val in self.vals:
-			val.write_message(response)
+	def send(self, request, response):
+		personId = loads(request)['personId']
+
+		if personId == '':
+			[val.write_message(response) for val in self.vals]
+		else:
+			[val.write_message(response) for val in self.vals if val.personId == personId]
