@@ -10,10 +10,14 @@ import dispatcher
 from model.all import All
 
 
-class DebugHandler(tornado.web.RequestHandler):
+class CleanHandler(tornado.web.RequestHandler):
 	@tornado.web.asynchronous
 	def get(self):
-		self.render('debug.html')
+		from pymongo import MongoClient
+		client = MongoClient('localhost', 27017)
+		client.drop_database('test_database')
+
+		self.redirect('/?personId=1')
 
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -41,7 +45,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 app = tornado.web.Application(
 	[
 		(r'/', IndexHandler),
-		(r'/debug', DebugHandler),
+		(r'/clean', CleanHandler),
 		(r'/ws', WebSocketHandler),
 	],
 		template_path = os.path.join(os.getcwd(), 'template'),
