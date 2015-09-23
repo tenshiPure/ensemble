@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from model.base import Base
+
 
 class Message(Base):
 	def getAll(self):
@@ -11,4 +14,4 @@ class Message(Base):
 
 
 	def toRow(self):
-		return {'body': self.request['body'], 'groupId': self.request['groupId']}
+		return {'body': self.request['body'], 'groupId': self.request['groupId'], 'personId': self.request['personId'], 'created': datetime.now().strftime('%Y%m%d%H%M%S')}

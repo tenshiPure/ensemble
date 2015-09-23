@@ -23,7 +23,7 @@ angular.module('GroupApp', ['ngWebSocket']).factory('socket', function($websocke
 			dataStream.send(baseGetParams('all', getGroupId(), getPersonId(), {}));
 		},
 		postMessage: function() {
-			dataStream.send(basePostParams('message', getGroupId(), '', { body: $('#message-body').val() }));
+			dataStream.send(basePostParams('message', getGroupId(), getPersonId(), { body: $('#message-body').val() }));
 		},
 	};
 

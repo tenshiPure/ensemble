@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 import tornado.web
 
 from pymongo import MongoClient
@@ -15,9 +17,10 @@ class CleanHandler(tornado.web.RequestHandler):
 		group1 = db.groups.insert_one({'name': u'東京シティブラスオルケスター'}).inserted_id.__str__()
 		group2 = db.groups.insert_one({'name': u'伊藤マリーンズ'}).inserted_id.__str__()
 
-		db.messages.insert_one({'body': u'おはよう', 'groupId': group1})
-		db.messages.insert_one({'body': u'こんにちは', 'groupId': group1})
-		db.messages.insert_one({'body': u'こんばんは', 'groupId': group1})
-		db.messages.insert_one({'body': u'また別のおはよう', 'groupId': group2})
+		now = datetime.now().strftime('%Y%m%d%H%M%S')
+		db.messages.insert_one({'body': u'おはよう', 'created': now, 'groupId': group1, 'personId': '1'})
+		db.messages.insert_one({'body': u'こんにちは', 'created': now, 'groupId': group1, 'personId': '1'})
+		db.messages.insert_one({'body': u'こんばんは', 'created': now, 'groupId': group1, 'personId': '1'})
+		db.messages.insert_one({'body': u'また別のおはよう', 'created': now, 'groupId': group2, 'personId': '1'})
 
 		self.redirect('groups?personId=1')
