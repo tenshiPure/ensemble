@@ -1,5 +1,5 @@
 angular.module('GroupApp', ['ngWebSocket']).factory('socket', function($websocket) {
-	var dataStream = $websocket('ws://localhost:8080/group-ws?personId=' + getPersonId());
+	var dataStream = $websocket('ws://localhost:8080/group-ws?groupId=' + getGroupId() + '&personId=' + getPersonId());
 
 	var messages = [];
 
@@ -20,10 +20,10 @@ angular.module('GroupApp', ['ngWebSocket']).factory('socket', function($websocke
 	var methods = {
 		messages: messages,
 		getAll: function() {
-			dataStream.send(baseGetParams('all', getPersonId(), {}));
+			dataStream.send(baseGetParams('all', getGroupId(), getPersonId(), {}));
 		},
 		postMessage: function() {
-			dataStream.send(basePostParams('message', '', { body: $('#message-body').val() }));
+			dataStream.send(basePostParams('message', getGroupId(), '', { body: $('#message-body').val() }));
 		},
 	};
 
@@ -35,16 +35,20 @@ angular.module('GroupApp', ['ngWebSocket']).factory('socket', function($websocke
 
 }]);
 
-baseGetParams = function(model, personId, others) {
-  return baseParams('get', model, personId, others);
+baseGetParams = function(model, groupId, personId, others) {
+  return baseParams('get', model, groupId, personId, others);
 };
 
-basePostParams = function(model, personId, others) {
-  return baseParams('post', model, personId, others);
+basePostParams = function(model, groupId, personId, others) {
+  return baseParams('post', model, groupId, personId, others);
 };
 
-baseParams = function(action, model, personId, others) {
-  return JSON.stringify($.extend({ action: action, model: model, personId: personId }, others));
+baseParams = function(action, model, groupId, personId, others) {
+  return JSON.stringify($.extend({ action: action, model: model, groupId: groupId, personId: personId }, others));
+};
+
+getGroupId = function() {
+  return $('#group-id').val();
 };
 
 getPersonId = function() {

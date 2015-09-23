@@ -19,7 +19,4 @@ class Clients:
 	def send(self, request, response):
 		personId = loads(request)['personId']
 
-		if personId == '':
-			[val.write_message(response) for val in self.vals]
-		else:
-			[val.write_message(response) for val in self.vals if val.personId == personId]
+		[val.write_message(response) for val in self.vals if val.personId == personId]

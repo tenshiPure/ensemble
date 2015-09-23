@@ -1,6 +1,6 @@
 import tornado.websocket
 
-from client import Clients
+from group_client import Clients
 import dispatcher
 
 
@@ -9,6 +9,7 @@ clients = Clients()
 
 class GroupWebSocketHandler(tornado.websocket.WebSocketHandler):
 	def open(self):
+		self.groupId = self.get_argument('groupId')
 		self.personId = self.get_argument('personId')
 		clients.append(self)
 

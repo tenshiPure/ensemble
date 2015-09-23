@@ -1,6 +1,6 @@
 import tornado.websocket
 
-from client import Clients
+from groups_client import Clients
 import dispatcher
 
 
