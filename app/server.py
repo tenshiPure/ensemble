@@ -7,13 +7,19 @@ import tornado.websocket
 from client import Clients
 import dispatcher
 
-from model.message import Message
+from model.all import All
+
+
+class DebugHandler(tornado.web.RequestHandler):
+	@tornado.web.asynchronous
+	def get(self):
+		self.render('debug.html')
 
 
 class IndexHandler(tornado.web.RequestHandler):
 	@tornado.web.asynchronous
 	def get(self):
-		self.render("index.html")
+		self.render('index.html')
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
@@ -33,15 +39,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 app = tornado.web.Application(
 	[
-		(r"/", IndexHandler),
-		(r"/ws", WebSocketHandler),
+		(r'/', IndexHandler),
+		(r'/debug', DebugHandler),
+		(r'/ws', WebSocketHandler),
 	],
 		template_path = os.path.join(os.getcwd(), 'template'),
 		static_path = os.path.join(os.getcwd(), 'static'),
 	)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	clients = Clients()
 
 	app.listen(8080)

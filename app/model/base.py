@@ -15,5 +15,6 @@ class Base:
 		elif self.request['action'] == 'post':
 			return self.post()
 
+
 	def createResponse(self, model, cursor):
 		return dumps({'header': {'status': 'ok', 'model': model}, 'body': loads(dumps(cursor))})

@@ -1,34 +1,43 @@
-angular.module('App', ['ngWebSocket']).factory('socket', function($websocket) {
+angular.module('App', ['ngWebSocket']).factory('socket', function($websocket, $http) {
 	var dataStream = $websocket('ws://localhost:8080/ws');
 
-	var response = {groups: [], persons: []};
+	var groups = [];
+	var messages = [];
 
 	dataStream.onMessage(function(message) {
-		var json = JSON.parse(message.data);
+    var json = JSON.parse(message.data);
+
 		if (json['header']['status'] === 'ok') {
-			response[json['header']['model']].push(json['body']);
+      if (json['header']['model'] == 'all') {
+        for (group of json['body']['groups'])
+          groups.push(group);
+        for (message of json['body']['messages'])
+          messages.push(message);
+      }
+
+      if (json['header']['model'] == 'group')
+        groups.push(json['body']);
+
+      if (json['header']['model'] == 'message')
+        messages.push(json['body']);
 		}
 	});
 
 	var methods = {
-		response: response,
-		getGroups: function() {
-			dataStream.send(JSON.stringify({ action: 'get', model: 'group' }));
+		groups: groups,
+		messages: messages,
+		getAll: function(mode) {
+			dataStream.send(JSON.stringify({ mode: mode, action: 'get', model: 'all' }));
 		},
-		postGroup: function() {
-			dataStream.send(JSON.stringify({ action: 'post', model: 'group', name: $('#group-name').val() }));
-		},
-		getPersons: function() {
-			dataStream.send(JSON.stringify({ action: 'get', model: 'person' }));
-		},
-		postPerson: function() {
-			dataStream.send(JSON.stringify({ action: 'post', model: 'person', name: $('#person-name').val(), icon: $('#person-icon').val() }));
+		postMessage: function(mode) {
+			dataStream.send(JSON.stringify({ mode: mode, action: 'post', model: 'message', body: $('#message-body').val() }));
 		},
 	};
 
 	return methods;
 
-}).controller('MainController', ['$scope', 'socket', function ($scope, socket) {
+}).controller('MainController', ['$scope', '$http', 'socket', function ($scope, $http, socket) {
+  socket.getAll('init');
 	$scope.socket = socket;
 
 }]);

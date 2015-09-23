@@ -1,16 +1,14 @@
-from bson.json_util import dumps
-
 from model.base import Base
 
 class Message(Base):
 	def getAll(self):
-		return dumps(self.db.posts.find())
+		return self.createResponse('message', self.db.messages.find())
 
 
 	def post(self):
-		pk = self.db.posts.insert_one(self.toRow()).inserted_id
-		return dumps(self.db.posts.find_one(pk))
+		pk = self.db.messages.insert_one(self.toRow()).inserted_id
+		return self.createResponse('message', self.db.messages.find_one(pk))
 
 
 	def toRow(self):
-		return {'text': self.request['text'], 'author': self.request['author']}
+		return {'body': self.request['body']}
