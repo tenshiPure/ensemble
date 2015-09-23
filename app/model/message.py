@@ -11,4 +11,4 @@ class Message(Base):
 
 
 	def toRow(self):
-		return {'body': self.request['body']}
+		return {'body': self.request['body'], 'groupId': self.request['groupId']}

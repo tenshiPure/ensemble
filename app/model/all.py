@@ -5,7 +5,6 @@ from model.base import Base
 
 class All(Base):
 	def getAll(self):
-		groups = loads(dumps(self.db.groups.find()))
-		messages = loads(dumps(self.db.messages.find()))
+		messages = loads(dumps(self.db.messages.find({'groupId': self.request['groupId']})))
 
-		return self.createResponse('all', {'groups': groups, 'messages': messages})
+		return self.createResponse('all', {'messages': messages})

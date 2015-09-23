@@ -7,8 +7,8 @@ angular.module('GroupsApp', ['ngWebSocket']).factory('socket', function($websock
     var json = JSON.parse(message.data);
 
 		if (json['header']['status'] === 'ok') {
-      if (json['header']['model'] == 'all') {
-        for (group of json['body']['groups'])
+      if (json['header']['model'] == 'group') {
+        for (group of json['body'])
           groups.push(group);
       }
 		}
@@ -16,15 +16,15 @@ angular.module('GroupsApp', ['ngWebSocket']).factory('socket', function($websock
 
 	var methods = {
 		groups: groups,
-		getAll: function() {
-			dataStream.send(baseGetParams('all', getPersonId(), {}));
+		getGroups: function() {
+			dataStream.send(baseGetParams('group', getPersonId(), {}));
 		},
 	};
 
 	return methods;
 
 }).controller('MainController', ['$scope', 'socket', function ($scope, socket) {
-  socket.getAll();
+  socket.getGroups();
 	$scope.socket = socket;
 
 }]);
