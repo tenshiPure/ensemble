@@ -2,24 +2,16 @@
   <head>
     <title></title>
 
-    <link rel="stylesheet" href="{{ static_url("css/index.css") }}"/>
     <link rel="stylesheet" href="{{ static_url("css/media.css") }}"/>
 
     <script src="{{ static_url("js/lib/angular.js") }}"></script>
     <script src="{{ static_url("js/lib/angular-websocket.js") }}"></script>
     <script src="{{ static_url("js/lib/jquery.js") }}"></script>
-    <script src="{{ static_url("js/app.js") }}"></script>
+    <script src="{{ static_url("js/group.js") }}"></script>
 
   </head>
-  <body ng-App="App">
+  <body ng-App="GroupApp">
 		<div ng-controller="MainController">
-      <p>グループ</p>
-			<ul>
-				<li ng-repeat="group in socket.groups">
-					{{! group.name }}
-				</li>
-			</ul>
-
 			<div class="media" ng-repeat="message in socket.messages">
         <img class="media__icon" src="{{ static_url("image/hoge.png") }}">
         <div class="media__body">

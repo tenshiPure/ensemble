@@ -1,8 +1,7 @@
-angular.module('App', ['ngWebSocket']).factory('socket', function($websocket, $http) {
-	var dataStream = $websocket('ws://localhost:8080/ws?personId=' + getPersonId());
+angular.module('GroupsApp', ['ngWebSocket']).factory('socket', function($websocket) {
+	var dataStream = $websocket('ws://localhost:8080/groups-ws?personId=' + getPersonId());
 
 	var groups = [];
-	var messages = [];
 
 	dataStream.onMessage(function(message) {
     var json = JSON.parse(message.data);
@@ -11,32 +10,20 @@ angular.module('App', ['ngWebSocket']).factory('socket', function($websocket, $h
       if (json['header']['model'] == 'all') {
         for (group of json['body']['groups'])
           groups.push(group);
-        for (message of json['body']['messages'])
-          messages.push(message);
       }
-
-      if (json['header']['model'] == 'group')
-        groups.push(json['body']);
-
-      if (json['header']['model'] == 'message')
-        messages.push(json['body']);
 		}
 	});
 
 	var methods = {
 		groups: groups,
-		messages: messages,
 		getAll: function() {
 			dataStream.send(baseGetParams('all', getPersonId(), {}));
-		},
-		postMessage: function() {
-			dataStream.send(basePostParams('message', '', { body: $('#message-body').val() }));
 		},
 	};
 
 	return methods;
 
-}).controller('MainController', ['$scope', '$http', 'socket', function ($scope, $http, socket) {
+}).controller('MainController', ['$scope', 'socket', function ($scope, socket) {
   socket.getAll();
 	$scope.socket = socket;
 
