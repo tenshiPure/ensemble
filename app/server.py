@@ -4,9 +4,10 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
-from pymongo import MongoClient
-
 from client import Clients
+import dispatcher
+
+from model.message import Message
 
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -24,8 +25,10 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 		clients.remove(self)
 
 
-	def on_message(self, message):
-		clients.sendJson(db.posts.find())
+	def on_message(self, request):
+		model = dispatcher.getModel(request)
+		response = model.call()
+		clients.send(response)
 
 
 app = tornado.web.Application(
@@ -39,8 +42,6 @@ app = tornado.web.Application(
 
 
 if __name__ == "__main__":
-	db = MongoClient('localhost', 27017).test_database
-
 	clients = Clients()
 
 	app.listen(8080)

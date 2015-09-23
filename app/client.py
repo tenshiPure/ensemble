@@ -1,6 +1,3 @@
-from bson.json_util import dumps
-
-
 class Clients:
 	def __init__(self):
 		self.vals = []
@@ -16,6 +13,6 @@ class Clients:
 			self.vals.remove(val)
 
 
-	def sendJson(self, cursor):
+	def send(self, response):
 		for val in self.vals:
-			val.write_message(dumps(cursor))
+			val.write_message(response)
