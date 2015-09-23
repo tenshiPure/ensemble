@@ -12,12 +12,21 @@
   </head>
   <body ng-App="App">
 		<div ng-controller="MainController">
-      <input type="button" value="get" ng-click="socket.getMessages()"><br>
-      <input id="text" type="text" placeholder="text"> / 
-      <input id="author" type="text" placeholder="author">
-      <input type="button" value="post" ng-click="socket.postMessage()">
+      <input type="button" value="group-get" ng-click="socket.getGroups()"><br>
+      <input id="group-name" type="text" placeholder="name">
+      <input type="button" value="group-post" ng-click="socket.postGroup()"><br>
+
 		  <pre>
-        {{! socket.messages|json }}
+        {{! socket.response.groups|json }}
+      </pre>
+
+      <input type="button" value="person-get" ng-click="socket.getPersons()"><br>
+      <input id="person-name" type="text" placeholder="name"> / 
+      <input id="person-icon" type="text" placeholder="icon">
+      <input type="button" value="person-post" ng-click="socket.postPerson()">
+
+		  <pre>
+        {{! socket.response.persons|json }}
       </pre>
     </div>
   </body>

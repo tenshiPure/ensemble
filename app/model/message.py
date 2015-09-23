@@ -1,5 +1,4 @@
-from pymongo import MongoClient
-from bson.json_util import dumps, loads
+from bson.json_util import dumps
 
 from model.base import Base
 

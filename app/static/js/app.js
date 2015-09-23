@@ -1,19 +1,28 @@
 angular.module('App', ['ngWebSocket']).factory('socket', function($websocket) {
 	var dataStream = $websocket('ws://localhost:8080/ws');
 
-	var messages = [];
+	var response = {groups: [], persons: []};
 
 	dataStream.onMessage(function(message) {
-		messages.push(JSON.parse(message.data));
+		var json = JSON.parse(message.data);
+		if (json['header']['status'] === 'ok') {
+			response[json['header']['model']].push(json['body']);
+		}
 	});
 
 	var methods = {
-		messages: messages,
-		getMessages: function() {
-			dataStream.send(JSON.stringify({ action: 'get', model: 'message' }));
+		response: response,
+		getGroups: function() {
+			dataStream.send(JSON.stringify({ action: 'get', model: 'group' }));
 		},
-		postMessage: function() {
-			dataStream.send(JSON.stringify({ action: 'post', model: 'message', author: $('#author').val(), text: $('#text').val() }));
+		postGroup: function() {
+			dataStream.send(JSON.stringify({ action: 'post', model: 'group', name: $('#group-name').val() }));
+		},
+		getPersons: function() {
+			dataStream.send(JSON.stringify({ action: 'get', model: 'person' }));
+		},
+		postPerson: function() {
+			dataStream.send(JSON.stringify({ action: 'post', model: 'person', name: $('#person-name').val(), icon: $('#person-icon').val() }));
 		},
 	};
 
