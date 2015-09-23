@@ -3,6 +3,7 @@
     <title></title>
 
     <link rel="stylesheet" href="{{ static_url("css/index.css") }}"/>
+    <link rel="stylesheet" href="{{ static_url("css/media.css") }}"/>
 
     <script src="{{ static_url("js/lib/angular.js") }}"></script>
     <script src="{{ static_url("js/lib/angular-websocket.js") }}"></script>
@@ -19,12 +20,14 @@
 				</li>
 			</ul>
 
-      <p>メッセージ</p>
-			<ul>
-				<li ng-repeat="message in socket.messages">
-					{{! message.body }}
-				</li>
-			</ul>
+			<div class="media" ng-repeat="message in socket.messages">
+        <img class="media__icon" src="{{ static_url("image/hoge.png") }}">
+        <div class="media__body">
+          <span class="media__body__by">hoge</span>
+          <span class="media__body__at">17:32</span>
+          <p class="media__body__text">{{! message.body }}</p>
+        </div>
+			</div>
 
       <textarea id="message-body"></textarea>
       <input type="button" value="post" ng-click="socket.postMessage()">

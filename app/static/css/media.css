@@ -1,0 +1,38 @@
+.media:before, .media:after {
+  display: table;
+  content: " ";
+}
+
+.media:after {
+  clear: both;
+}
+
+.media {
+  border-top: 1px solid #000;
+}
+
+.media__icon {
+  display: block;
+  height: 70px;
+  float: left;
+  margin-right: 2em;
+}
+
+.media__body {
+  overflow: hidden;
+  min-height: 70px;
+}
+
+.media__body__by {
+  color: #000;
+}
+
+.media__body__at {
+  color: #000;
+  float: right;
+}
+
+.media__body__text {
+  margin-top: 0;
+  margin-bottom: 0;
+}
