@@ -3,6 +3,7 @@ import os.path
 import tornado.ioloop
 import tornado.web
 
+from handler.ng import NgHandler
 from handler.groups import GroupsHandler
 from handler.groups_websocket import GroupsWebSocketHandler
 from handler.group import GroupHandler
@@ -12,6 +13,7 @@ from handler.clean import CleanHandler
 
 app = tornado.web.Application(
 	[
+		(r'/ng', NgHandler),
 		(r'/groups', GroupsHandler),
 		(r'/groups-ws', GroupsWebSocketHandler),
 		(r'/group', GroupHandler),
