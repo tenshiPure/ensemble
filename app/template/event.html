@@ -1,0 +1,14 @@
+<p>event #{{! groupId }}/#{{! personId }}</p>
+
+<div ng-include="'template?name=nav'"></div>
+
+<ul>
+  <li ng-repeat="group in data.groups">
+    {{! group.name }}
+  </li>
+</ul>
+<ul>
+  <li ng-repeat="message in data.messages">
+    {{! message.body }}
+  </li>
+</ul>

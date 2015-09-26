@@ -1,31 +1,6 @@
-<html>
-  <head>
-    <title></title>
+<p>group</p>
 
-    <link rel="stylesheet" href="{{ static_url("css/media.css") }}"/>
-
-    <script src="{{ static_url("js/lib/angular.js") }}"></script>
-    <script src="{{ static_url("js/lib/angular-websocket.js") }}"></script>
-    <script src="{{ static_url("js/lib/jquery.js") }}"></script>
-    <script src="{{ static_url("js/group.js") }}"></script>
-
-  </head>
-  <body ng-App="GroupApp">
-		<div ng-controller="MainController">
-			<div class="media" ng-repeat="message in socket.messages">
-        <img class="media__icon" src="{{ static_url("image/hoge.png") }}">
-        <div class="media__body">
-          <span class="media__body__by">{{! message.personId }}</span>
-          <span class="media__body__at">{{! message.created }}</span>
-          <p class="media__body__text">{{! message.body }}</p>
-        </div>
-			</div>
-
-      <textarea id="message-body"></textarea>
-      <input type="button" value="post" ng-click="socket.postMessage()">
-    </div>
-
-    <input id="group-id" type="hidden" value="{{ groupId }}">
-    <input id="person-id" type="hidden" value="{{ personId }}">
-  </body>
-</html>
+<ul>
+  <li><a ng-href="#/event/1/1">グループ1</a></li>
+  <li><a ng-href="#/event/2/1">グループ2</a></li>
+</ul>

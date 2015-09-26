@@ -1,0 +1,11 @@
+<p>message #{{! groupId }}/#{{! personId }}</p>
+
+<div ng-include="'template?name=nav'"></div>
+
+<input type="text" ng-model="body">
+<input type="button" value="send" ng-click="post(body)">
+<ul>
+  <li ng-repeat="message in data.messages">
+    {{! message.body }}
+  </li>
+</ul>

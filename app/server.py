@@ -5,6 +5,7 @@ import tornado.web
 
 from handler.ng import NgHandler
 from handler.socket import SocketHandler
+from handler.template import TemplateHandler
 from handler.groups import GroupsHandler
 from handler.groups_websocket import GroupsWebSocketHandler
 from handler.group import GroupHandler
@@ -16,6 +17,7 @@ app = tornado.web.Application(
 	[
 		(r'/ng', NgHandler),
 		(r'/ws', SocketHandler),
+		(r'/template', TemplateHandler),
 		(r'/groups', GroupsHandler),
 		(r'/groups-ws', GroupsWebSocketHandler),
 		(r'/group', GroupHandler),

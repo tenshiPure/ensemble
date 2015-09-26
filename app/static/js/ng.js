@@ -2,31 +2,31 @@ angular.module('NgApp', ['ngWebSocket', 'ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'group-template',
+      templateUrl: 'template?name=group',
       controller: 'GroupController'
     })
     .when('/event/:groupId/:personId', {
-      templateUrl: 'event-template',
+      templateUrl: 'template?name=event',
       controller: 'EventController'
     })
     .when('/message/:groupId/:personId', {
-      templateUrl: 'message-template',
+      templateUrl: 'template?name=message',
       controller: 'MessageController'
     })
     .when('/schedule/:groupId/:personId', {
-      templateUrl: 'schedule-template',
+      templateUrl: 'template?name=schedule',
       controller: 'ScheduleController'
     })
     .when('/attendance/:groupId/:personId/:scheduleId', {
-      templateUrl: 'attendance-template',
+      templateUrl: 'template?name=attendance',
       controller: 'AttendanceController'
     })
     .when('/link/:groupId/:personId', {
-      templateUrl: 'link-template',
+      templateUrl: 'template?name=link',
       controller: 'LinkController'
     })
     .when('/comment/:groupId/:personId/:linkId', {
-      templateUrl: 'comment-template',
+      templateUrl: 'template?name=comment',
       controller: 'CommentController'
     })
     .otherwise({
@@ -34,7 +34,7 @@ angular.module('NgApp', ['ngWebSocket', 'ngRoute'])
     });
 }])
 
-.controller('SocketController', ['$scope', '$websocket', function SocketController($scope, $websocket) {
+.controller('RootController', ['$scope', '$websocket', function RootController($scope, $websocket) {
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
 	$scope.socket.onMessage(function(r) {
