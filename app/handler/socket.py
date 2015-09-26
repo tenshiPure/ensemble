@@ -1,5 +1,6 @@
 import tornado.websocket
 
+from model import Model
 
 clients = []
 
@@ -16,19 +17,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
 
 	def on_message(self, request):
-		from pymongo import MongoClient
-		from bson.json_util import dumps, loads
+		model = Model(request)
+		response = model.execute()
 
-		db = MongoClient('localhost', 27017).test_database
-		request = loads(request)
-
-		if request['model'] == 'message':
-			from datetime import datetime
-			pk = db.messages.insert_one({'body': request['body'], 'groupId': request['groupId'], 'personId': request['personId'], 'created': datetime.now().strftime('%Y%m%d%H%M%S')}).inserted_id
-			res = dumps({'model': 'message', 'body': loads(dumps(db.messages.find_one(pk)))})
-		elif request['model'] == 'all':
-			groups = loads(dumps(db.groups.find()))
-			messages = loads(dumps(db.messages.find()))
-			res = dumps({'model': 'all', 'body': {'groups': groups, 'messages': messages}})
-
-		[c.write_message(res) for c in clients]
+		[c.write_message(response) for c in clients]
