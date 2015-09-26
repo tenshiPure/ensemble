@@ -35,17 +35,17 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 }])
 
 .controller('RootController', ['$scope', '$websocket', function RootController($scope, $websocket) {
+  $scope.data = {};
+
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
 	$scope.socket.onMessage(function(r) {
     json = JSON.parse(r.data);
     if (json['method'] == 'get') {
       if (json['model'] == 'group')
-        $scope.data = json['body'];
-      if (json['model'] == 'message') {
-        console.log(json);
+        $scope.data = $.extend(true, $scope.data, json['body']);
+      if (json['model'] == 'message')
         $scope.data[json['groupId']]['messages'] = json['body'];
-      }
     }
 
     if (json['method'] == 'post') {
