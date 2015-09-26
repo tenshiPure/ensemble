@@ -59,12 +59,16 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   $scope.socket.send(JSON.stringify({method: 'get', model: 'group', personId: $routeParams.personId}));
 }])
 
-.controller('EventController', ['$scope', '$routeParams', function EventController($scope, $routeParams) {
+.controller('EventController', ['$scope', '$location', '$routeParams', function EventController($scope, $location, $routeParams) {
+  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
+
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
 }])
 
-.controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
+.controller('MessageController', ['$scope', '$location', '$routeParams', function MessageController($scope, $location, $routeParams) {
+  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
+
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
 
@@ -75,24 +79,30 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   };
 }])
 
-.controller('ScheduleController', ['$scope', '$routeParams', function ScheduleController($scope, $routeParams) {
+.controller('ScheduleController', ['$scope', '$location', '$routeParams', function ScheduleController($scope, $location, $routeParams) {
+  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
+
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
 }])
 
-.controller('AttendanceController', ['$scope', '$routeParams', function AttendanceController($scope, $routeParams) {
-  $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
-  $scope.scheduleId = $routeParams.scheduleId;
-}])
+.controller('AttendanceController', ['$scope', '$location', '$routeParams', function AttendanceController($scope, $location, $routeParams) {
+  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
-.controller('LinkController', ['$scope', '$routeParams', function LinkController($scope, $routeParams) {
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
 }])
 
-.controller('CommentController', ['$scope', '$routeParams', function CommentController($scope, $routeParams) {
+.controller('LinkController', ['$scope', '$location', '$routeParams', function LinkController($scope, $location, $routeParams) {
+  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
+
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
-  $scope.linkId = $routeParams.linkId;
+}])
+
+.controller('CommentController', ['$scope', '$location', '$routeParams', function CommentController($scope, $location, $routeParams) {
+  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
+
+  $scope.groupId = $routeParams.groupId;
+  $scope.personId = $routeParams.personId;
 }]);

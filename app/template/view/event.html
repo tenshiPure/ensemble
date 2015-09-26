@@ -1,14 +1,7 @@
-<p>event #{{! groupId }}/#{{! personId }}</p>
-
 <div ng-include="'include?name=nav'"></div>
 
 <ul>
-  <li ng-repeat="group in data.groups">
-    {{! group.name }}
-  </li>
-</ul>
-<ul>
-  <li ng-repeat="message in data.messages">
-    {{! message.body }}
+  <li ng-repeat="event in data[groupId].events">
+    {{! event.body }}
   </li>
 </ul>
