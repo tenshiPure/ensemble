@@ -34,26 +34,25 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     });
 }])
 
-.controller('RootController', ['$scope', '$websocket', function RootController($scope, $websocket) {
+.controller('RootController', ['$scope', '$websocket', '$routeParams', function RootController($scope, $websocket, $routeParams) {
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
 	$scope.socket.onMessage(function(r) {
     json = JSON.parse(r.data);
-    if (json['model'] == 'all')
+    if (json['model'] == 'groups')
       $scope.data = json['body'];
     if (json['model'] == 'message')
-      $scope.data['messages'].push(json['body']);
+      $scope.data[$routeParams.groupId]['messages'].push(json['body']);
   });
 }])
 
 .controller('GroupController', ['$scope', function GroupController($scope) {
+  $scope.socket.send(JSON.stringify({model: 'groups'}));
 }])
 
 .controller('EventController', ['$scope', '$routeParams', function EventController($scope, $routeParams) {
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
-
-  $scope.socket.send(JSON.stringify({model: 'all', groupId: $routeParams.groupId, personId: $routeParams.personId}));
 }])
 
 .controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {

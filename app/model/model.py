@@ -11,17 +11,20 @@ class Model:
 
 
 	def execute(self):
-		if self.request['model'] == 'all':
-			return self.getAll()
+		if self.request['model'] == 'groups':
+			return self.getGroups()
 		elif self.request['model'] == 'message':
 			return self.postMessage()
 
 
-	def getAll(self):
-		groups = loads(dumps(self.db.groups.find()))
-		messages = loads(dumps(self.db.messages.find()))
+	def getGroups(self):
+		groups = {}
+		for group in loads(dumps(self.db.groups.find())):
+			pk = str(group['_id'])
+			events = self.db.events.find({'groupId': pk})
+			groups[pk] = {'name': group['name'], 'events': events, 'messages': []}
 
-		return self.__response('all', {'groups': groups, 'messages': messages})
+		return self.__response('groups', groups)
 
 
 	def postMessage(self):

@@ -1,6 +1,7 @@
 <p>group</p>
 
 <ul>
-  <li><a ng-href="#/event/1/1">グループ1</a></li>
-  <li><a ng-href="#/event/2/1">グループ2</a></li>
+  <li ng-repeat="(groupId, group) in data">
+    <a ng-href="#/event/{{! groupId }}/1">{{! group.name }}</a>
+  </li>
 </ul>
