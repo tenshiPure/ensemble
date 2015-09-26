@@ -1,4 +1,4 @@
-angular.module('NgApp', ['ngRoute'])
+angular.module('NgApp', ['ngWebSocket', 'ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
@@ -34,7 +34,20 @@ angular.module('NgApp', ['ngRoute'])
     });
 }])
 
+.controller('SocketController', ['$scope', '$websocket', function SocketController($scope, $websocket) {
+	var socket = $websocket('ws://localhost:8080/ws');
+
+	socket.onMessage(function(r) {
+    $scope.result = r.data;
+  });
+
+  $scope.send = function() {
+    socket.send('hoge--');
+  };
+}])
+
 .controller('GroupController', ['$scope', function GroupController($scope) {
+  $scope.groups = 'group list';
 }])
 
 .controller('EventController', ['$scope', '$routeParams', function EventController($scope, $routeParams) {

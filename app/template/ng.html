@@ -1,18 +1,25 @@
 <html>
   <head>
     <script src="{{ static_url("js/lib/angular.js") }}"></script>
+    <script src="{{ static_url("js/lib/angular-websocket.js") }}"></script>
     <script src="{{ static_url("js/lib/angular-route.js") }}"></script>
     <script src="{{ static_url("js/ng.js") }}"></script>
 
   </head>
   <body ng-App="NgApp">
-    <div ng-view></div>
+    <div ng-controller="SocketController">
+      <input type="button" value="send" ng-click="send()">
+      <p>{{! result }}</p>
+      <hr>
+      <div ng-view></div>
+      <hr>
       <script type="text/ng-template" id="group-template">
         <p>group</p>
         <ul>
           <li><a ng-href="#/event/1">グループ1</a></li>
           <li><a ng-href="#/event/2">グループ2</a></li>
         </ul>
+        <p>{{! groups }}</p>
       </script>
 
       <script type="text/ng-template" id="event-template">
@@ -88,6 +95,6 @@
           <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>
         </ul>
       </script>
-
+    </div>
   </body>
 </html>
