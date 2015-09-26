@@ -1,16 +1,20 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  
     <script src="{{ static_url("js/lib/angular.js") }}"></script>
     <script src="{{ static_url("js/lib/angular-websocket.js") }}"></script>
     <script src="{{ static_url("js/lib/angular-route.js") }}"></script>
     <script src="{{ static_url("js/lib/jquery.js") }}"></script>
     <script src="{{ static_url("js/app.js") }}"></script>
 
+    <link rel="stylesheet" href="{{ static_url("css/common.css") }}">
+    <link rel="stylesheet" href="{{ static_url("css/contents.css") }}">
+
   </head>
   <body ng-App="App">
     <div ng-controller="RootController">
-      <div ng-view></div>
-      <pre>{{! data|json }}</pre>
+      <div ng-view class="clearfix full-height"></div>
     </div>
   </body>
 </html>

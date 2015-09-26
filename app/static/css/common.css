@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+
+@media screen and (min-width: 768px) {
+  #layout-groups {
+    width: 25%;
+    float: left;
+    border-right: 1px solid black;
+    margin: 8px 0;
+    padding: 0 8px;
+  }
+
+  #layout-groups ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  #layout-groups {
+    display: none;
+  }
+}
+
+
+.full-height {
+  height: 100%;
+}
+
+.clearfix:after {
+  content: "";
+  clear: both;
+  display: block;
+}

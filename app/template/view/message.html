@@ -1,10 +1,18 @@
-<div ng-include="'include?name=nav'"></div>
+<div ng-include="'include?name=group'" id="layout-groups" class="clearfix full-height"></div>
 
-<input type="text" ng-model="body">
-<input type="button" value="send" ng-click="post(body)">
+<div id="layout-contents">
+  <p id="layout-group-name">
+    {{! data[groupId].name }}
+  </p>
 
-<ul>
-  <li ng-repeat="message in data[groupId].messages">
-    {{! message.body }}
-  </li>
-</ul>
+  <div ng-include="'include?name=nav'"></div>
+
+  <input type="text" ng-model="body">
+  <input type="button" value="send" ng-click="post(body)">
+
+  <ul>
+    <li ng-repeat="message in data[groupId].messages">
+      {{! message.body }}
+    </li>
+  </ul>
+</div>

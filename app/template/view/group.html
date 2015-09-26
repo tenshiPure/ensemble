@@ -1,5 +1,3 @@
-<ul>
-  <li ng-repeat="(groupId, group) in data">
-    <a ng-href="#/event/{{! groupId }}/1">{{! group.name }} ({{! group.events.length }})</a>
-  </li>
-</ul>
+<div ng-include="'include?name=group'"></div>
+
+<p>groups</p>
