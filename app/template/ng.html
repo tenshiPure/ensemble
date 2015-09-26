@@ -8,8 +8,6 @@
   </head>
   <body ng-App="NgApp">
     <div ng-controller="SocketController">
-      <input type="button" value="send" ng-click="send()">
-      <p>{{! result }}</p>
       <hr>
       <div ng-view></div>
       <hr>
@@ -19,7 +17,8 @@
           <li><a ng-href="#/event/1">グループ1</a></li>
           <li><a ng-href="#/event/2">グループ2</a></li>
         </ul>
-        <p>{{! groups }}</p>
+        <input type="button" value="send" ng-click="postGroup()">
+        <p>{{! result }}</p>
       </script>
 
       <script type="text/ng-template" id="event-template">
