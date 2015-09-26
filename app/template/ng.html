@@ -10,8 +10,19 @@
       <script type="text/ng-template" id="group-template">
         <p>group</p>
         <ul>
-          <li><a ng-href="#/message/1">グループ1</a></li>
-          <li><a ng-href="#/message/2">グループ2</a></li>
+          <li><a ng-href="#/event/1">グループ1</a></li>
+          <li><a ng-href="#/event/2">グループ2</a></li>
+        </ul>
+      </script>
+
+      <script type="text/ng-template" id="event-template">
+        <p>event #{{! groupId }}</p>
+        <ul>
+          <li><a ng-href="#/">グループ一覧</a></li>
+          <li><a ng-href="#/event/{{! groupId }}">イベント</a></li>
+          <li><a ng-href="#/message/{{! groupId }}">メッセージ</a></li>
+          <li><a ng-href="#/schedule/{{! groupId }}">予定</a></li>
+          <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>
         </ul>
       </script>
 
@@ -19,6 +30,7 @@
         <p>message #{{! groupId }}</p>
         <ul>
           <li><a ng-href="#/">グループ一覧</a></li>
+          <li><a ng-href="#/event/{{! groupId }}">イベント</a></li>
           <li><a ng-href="#/message/{{! groupId }}">メッセージ</a></li>
           <li><a ng-href="#/schedule/{{! groupId }}">予定</a></li>
           <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>
@@ -29,6 +41,7 @@
         <p>schedule #{{! groupId }}</p>
         <ul>
           <li><a ng-href="#/">グループ一覧</a></li>
+          <li><a ng-href="#/event/{{! groupId }}">イベント</a></li>
           <li><a ng-href="#/message/{{! groupId }}">メッセージ</a></li>
           <li><a ng-href="#/schedule/{{! groupId }}">予定</a></li>
           <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>
@@ -43,6 +56,7 @@
         <p>attendance #{{! groupId }}/#{{! scheduleId }}</p>
         <ul>
           <li><a ng-href="#/">グループ一覧</a></li>
+          <li><a ng-href="#/event/{{! groupId }}">イベント</a></li>
           <li><a ng-href="#/message/{{! groupId }}">メッセージ</a></li>
           <li><a ng-href="#/schedule/{{! groupId }}">予定</a></li>
           <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>
@@ -53,6 +67,7 @@
         <p>link #{{! groupId }}</p>
         <ul>
           <li><a ng-href="#/">グループ一覧</a></li>
+          <li><a ng-href="#/event/{{! groupId }}">イベント</a></li>
           <li><a ng-href="#/message/{{! groupId }}">メッセージ</a></li>
           <li><a ng-href="#/schedule/{{! groupId }}">予定</a></li>
           <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>
@@ -67,6 +82,7 @@
         <p>comment #{{! groupId }}/#{{! linkId }}</p>
         <ul>
           <li><a ng-href="#/">グループ一覧</a></li>
+          <li><a ng-href="#/event/{{! groupId }}">イベント</a></li>
           <li><a ng-href="#/message/{{! groupId }}">メッセージ</a></li>
           <li><a ng-href="#/schedule/{{! groupId }}">予定</a></li>
           <li><a ng-href="#/link/{{! groupId }}">リンク</a></li>

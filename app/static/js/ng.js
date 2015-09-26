@@ -5,6 +5,10 @@ angular.module('NgApp', ['ngRoute'])
       templateUrl: 'group-template',
       controller: 'GroupController'
     })
+    .when('/event/:groupId', {
+      templateUrl: 'event-template',
+      controller: 'EventController'
+    })
     .when('/message/:groupId', {
       templateUrl: 'message-template',
       controller: 'MessageController'
@@ -31,6 +35,10 @@ angular.module('NgApp', ['ngRoute'])
 }])
 
 .controller('GroupController', ['$scope', function GroupController($scope) {
+}])
+
+.controller('EventController', ['$scope', '$routeParams', function EventController($scope, $routeParams) {
+  $scope.groupId = $routeParams.groupId;
 }])
 
 .controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
