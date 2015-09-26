@@ -23,4 +23,4 @@ class CleanHandler(tornado.web.RequestHandler):
 		db.messages.insert_one({'body': u'こんばんは', 'created': now, 'groupId': group1, 'personId': '1'})
 		db.messages.insert_one({'body': u'また別のおはよう', 'created': now, 'groupId': group2, 'personId': '1'})
 
-		self.redirect('groups?personId=1')
+		self.redirect('/')

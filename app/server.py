@@ -3,25 +3,19 @@ import os.path
 import tornado.ioloop
 import tornado.web
 
-from handler.ng import NgHandler
-from handler.socket import SocketHandler
-from handler.template import TemplateHandler
-from handler.groups import GroupsHandler
-from handler.groups_websocket import GroupsWebSocketHandler
-from handler.group import GroupHandler
-from handler.group_websocket import GroupWebSocketHandler
+from handler.main import MainHandler
+from handler.websocket import WebSocketHandler
+from handler.include import IncludeHandler
+from handler.view import ViewHandler
 from handler.clean import CleanHandler
 
 
 app = tornado.web.Application(
 	[
-		(r'/ng', NgHandler),
-		(r'/ws', SocketHandler),
-		(r'/template', TemplateHandler),
-		(r'/groups', GroupsHandler),
-		(r'/groups-ws', GroupsWebSocketHandler),
-		(r'/group', GroupHandler),
-		(r'/group-ws', GroupWebSocketHandler),
+		(r'/', MainHandler),
+		(r'/ws', WebSocketHandler),
+		(r'/include', IncludeHandler),
+		(r'/view', ViewHandler),
 		(r'/clean', CleanHandler),
 	],
 		template_path = os.path.join(os.getcwd(), 'template'),

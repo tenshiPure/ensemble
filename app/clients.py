@@ -16,7 +16,5 @@ class Clients:
 			self.vals.remove(val)
 
 
-	def send(self, request, response):
-		personId = loads(request)['personId']
-
-		[val.write_message(response) for val in self.vals if val.personId == personId]
+	def send(self, response):
+		[val.write_message(response) for val in self.vals]

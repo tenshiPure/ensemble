@@ -1,32 +1,32 @@
-angular.module('NgApp', ['ngWebSocket', 'ngRoute'])
+angular.module('App', ['ngWebSocket', 'ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'template?name=group',
+      templateUrl: 'view?name=group',
       controller: 'GroupController'
     })
     .when('/event/:groupId/:personId', {
-      templateUrl: 'template?name=event',
+      templateUrl: 'view?name=event',
       controller: 'EventController'
     })
     .when('/message/:groupId/:personId', {
-      templateUrl: 'template?name=message',
+      templateUrl: 'view?name=message',
       controller: 'MessageController'
     })
     .when('/schedule/:groupId/:personId', {
-      templateUrl: 'template?name=schedule',
+      templateUrl: 'view?name=schedule',
       controller: 'ScheduleController'
     })
     .when('/attendance/:groupId/:personId/:scheduleId', {
-      templateUrl: 'template?name=attendance',
+      templateUrl: 'view?name=attendance',
       controller: 'AttendanceController'
     })
     .when('/link/:groupId/:personId', {
-      templateUrl: 'template?name=link',
+      templateUrl: 'view?name=link',
       controller: 'LinkController'
     })
     .when('/comment/:groupId/:personId/:linkId', {
-      templateUrl: 'template?name=comment',
+      templateUrl: 'view?name=comment',
       controller: 'CommentController'
     })
     .otherwise({
