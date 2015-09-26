@@ -1,5 +1,4 @@
 import tornado.websocket
-import datetime
 
 
 clients = []
@@ -7,21 +6,29 @@ clients = []
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
 	def open(self):
-		print 'open'
-		self.write_message('res open')
 		if self not in clients:
 			clients.append(self)
 
 
 	def on_close(self):
-		print 'close'
-		self.write_message('res close')
 		if self in clients:
 			clients.remove(self)
-		print clients
 
 
 	def on_message(self, request):
-		print request
-		now = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-		[c.write_message('I get request: %s at %s' % (request, now)) for c in clients]
+		from pymongo import MongoClient
+		from bson.json_util import dumps, loads
+
+		db = MongoClient('localhost', 27017).test_database
+		request = loads(request)
+
+		if request['model'] == 'message':
+			from datetime import datetime
+			pk = db.messages.insert_one({'body': request['body'], 'groupId': request['groupId'], 'personId': request['personId'], 'created': datetime.now().strftime('%Y%m%d%H%M%S')}).inserted_id
+			res = dumps({'model': 'message', 'body': loads(dumps(db.messages.find_one(pk)))})
+		elif request['model'] == 'all':
+			groups = loads(dumps(db.groups.find()))
+			messages = loads(dumps(db.messages.find()))
+			res = dumps({'model': 'all', 'body': {'groups': groups, 'messages': messages}})
+
+		[c.write_message(res) for c in clients]
