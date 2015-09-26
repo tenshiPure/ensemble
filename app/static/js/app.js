@@ -34,20 +34,29 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     });
 }])
 
-.controller('RootController', ['$scope', '$websocket', '$routeParams', function RootController($scope, $websocket, $routeParams) {
+.controller('RootController', ['$scope', '$websocket', function RootController($scope, $websocket) {
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
 	$scope.socket.onMessage(function(r) {
     json = JSON.parse(r.data);
-    if (json['model'] == 'groups')
-      $scope.data = json['body'];
-    if (json['model'] == 'message')
-      $scope.data[$routeParams.groupId]['messages'].push(json['body']);
+    if (json['method'] == 'get') {
+      if (json['model'] == 'group')
+        $scope.data = json['body'];
+      if (json['model'] == 'message') {
+        console.log(json);
+        $scope.data[json['groupId']]['messages'] = json['body'];
+      }
+    }
+
+    if (json['method'] == 'post') {
+      if (json['model'] == 'message')
+        $scope.data[json['groupId']]['messages'].push(json['body']);
+    }
   });
 }])
 
-.controller('GroupController', ['$scope', function GroupController($scope) {
-  $scope.socket.send(JSON.stringify({model: 'groups'}));
+.controller('GroupController', ['$scope', '$routeParams', function GroupController($scope, $routeParams) {
+  $scope.socket.send(JSON.stringify({method: 'get', model: 'group', personId: $routeParams.personId}));
 }])
 
 .controller('EventController', ['$scope', '$routeParams', function EventController($scope, $routeParams) {
@@ -59,8 +68,10 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   $scope.groupId = $routeParams.groupId;
   $scope.personId = $routeParams.personId;
 
+  $scope.socket.send(JSON.stringify({method: 'get', model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId}));
+
   $scope.post = function(body) {
-    $scope.socket.send(JSON.stringify({model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId, body: body}));
+    $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId, body: body}));
   };
 }])
 
