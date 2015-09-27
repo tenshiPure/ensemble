@@ -18,9 +18,12 @@
 
       <div class="media__block">
         <div class="media__image--block">
-          <img class="media__image media__image--large" src="/static/image/icon/person/hoge.png">
+          <img class="media__image media__image--large" src="/static/image/icon/person/{{! message.person.icon }}">
         </div>
-        <div class="media__body--block pre-wrap">{{! message.body }}</div>
+        <div class="media__body--block">
+          <span class="time">{{! format(message.created) }}</span>
+          <div class="pre-wrap">{{! message.person.name }}<br>{{! message.body }}</div>
+        </div>
       </div>
     </div>
   </div>

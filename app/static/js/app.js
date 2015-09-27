@@ -34,7 +34,7 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     });
 }])
 
-.controller('RootController', ['$scope', '$websocket', function RootController($scope, $websocket) {
+.controller('RootController', ['$scope', '$websocket', '$filter', function RootController($scope, $websocket, $filter) {
   $scope.isCurrentTab = function(current) {
     return location.hash.indexOf(current) !== -1;
   };
@@ -57,6 +57,11 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
         $scope.data[json['groupId']]['messages'].unshift(json['body']);
     }
   });
+
+  $scope.format = function(string) {
+    var date = new Date(Date.parse(string));
+    return $filter('date')(date, 'MM/dd HH:mm:ss');
+  };
 }])
 
 .controller('GroupController', ['$scope', '$routeParams', function GroupController($scope, $routeParams) {

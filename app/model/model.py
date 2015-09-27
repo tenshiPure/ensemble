@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 import pymongo
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 from bson.json_util import dumps, loads
 
 
@@ -27,15 +28,23 @@ class Model:
 	def getGroups(self):
 		groups = OrderedDict()
 		for group in loads(dumps(self.db.groups.find())):
-			pk = str(group['_id'])
-			events = self.db.events.find({'groupId': pk}).sort('_id', pymongo.ASCENDING)
-			groups[pk] = {'name': group['name'], 'events': events, 'messages': []}
+			groupId = str(group['_id'])
+			events = self.db.events.find({'groupId': groupId}).sort('_id', pymongo.ASCENDING)
+			groups[groupId] = {'name': group['name'], 'events': events, 'messages': []}
 
 		return self.__response('get', 'group', groups)
 
 
 	def getMessages(self):
-		return self.__responseWithGroupId('get', 'message', self.db.messages.find({'groupId': self.request['groupId']}).sort('_id', pymongo.DESCENDING))
+		messages = self.db.messages.find({'groupId': self.request['groupId']}).sort('_id', pymongo.DESCENDING)
+
+		def join(message):
+			personId = message['personId']
+			person = self.db.persons.find_one({'_id': ObjectId(personId)})
+			message['person'] = person
+			return message
+
+		return self.__responseWithGroupId('get', 'message', map(join, messages))
 
 
 	def postMessage(self):
