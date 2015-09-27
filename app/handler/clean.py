@@ -8,7 +8,6 @@ from pymongo import MongoClient
 
 
 class CleanHandler(tornado.web.RequestHandler):
-	@tornado.web.asynchronous
 	def get(self):
 		client = MongoClient('localhost', 27017)
 		client.drop_database('test_database')
