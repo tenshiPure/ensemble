@@ -35,6 +35,10 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 }])
 
 .controller('RootController', ['$scope', '$websocket', function RootController($scope, $websocket) {
+  $scope.isCurrentTab = function(current) {
+    return location.hash.indexOf(current) !== -1;
+  };
+
   $scope.data = {};
 
 	$scope.socket = $websocket('ws://localhost:8080/ws');

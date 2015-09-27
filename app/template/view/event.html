@@ -1,9 +1,15 @@
-<div ng-include="'include?name=group'"></div>
+<div ng-include="'include?name=group'" id="layout-groups" class="clearfix full-height"></div>
 
-<div ng-include="'include?name=nav'"></div>
+<div id="layout-contents">
+  <p id="layout-group-name">
+    {{! data[groupId].name }}
+  </p>
 
-<ul>
-  <li ng-repeat="event in data[groupId].events">
-    {{! event.body }}
-  </li>
-</ul>
+  <div ng-include="'include?name=tab'" class="clearfix"></div>
+
+  <ul>
+    <li ng-repeat="event in data[groupId].events">
+      {{! event.body }}
+    </li>
+  </ul>
+</div>

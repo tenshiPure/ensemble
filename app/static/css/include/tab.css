@@ -1,11 +1,15 @@
 .tab {
-  background-color: #CCF;
+  background-color: #ccc;
   float: left;
   margin-right: 1rem;
   width: 9rem;
   height: 2rem;
   -webkit-border-top-left-radius: 13px;
   -webkit-border-top-right-radius: 13px;
+}
+
+.tab--current {
+  background-color: #eee;
 }
 
 @media screen and (min-width: 768px) {

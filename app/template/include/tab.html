@@ -1,12 +1,45 @@
 <link rel="stylesheet" href="{{ static_url("css/include/tab.css") }}">
 
-<div class="tab media" ng-repeat="(page, name) in {event: 'イベント', message: 'メッセージ', schedule: '予定', link: 'リンク'}">
-  <a class="media__block" ng-href="#/{{! page }}/{{! groupId }}/{{! personId }}">
+<div class="tab media" ng-class="{'tab--current': isCurrentTab('event')}">
+  <a class="media__block" ng-href="#/event/{{! groupId }}/{{! personId }}">
     <div class="media__image--block">
-      <img class="media__image media__image--normal" src="/static/image/icon/event/{{! page }}.png">
+      <img class="media__image media__image--normal" src="/static/image/icon/event/event.png">
     </div>
     <div class="media__body--block">
-      <span class="tab__text">{{! name }}</span>
+      <span class="tab__text">イベント</span>
+    </div>
+  </a>
+</div>
+
+<div class="tab media" ng-class="{'tab--current': isCurrentTab('message')}">
+  <a class="media__block" ng-href="#/message/{{! groupId }}/{{! personId }}">
+    <div class="media__image--block">
+      <img class="media__image media__image--normal" src="/static/image/icon/event/message.png">
+    </div>
+    <div class="media__body--block">
+      <span class="tab__text">メッセージ</span>
+    </div>
+  </a>
+</div>
+
+<div class="tab media" ng-class="{'tab--current': isCurrentTab('schedule')}">
+  <a class="media__block" ng-href="#/schedule/{{! groupId }}/{{! personId }}">
+    <div class="media__image--block">
+      <img class="media__image media__image--normal" src="/static/image/icon/event/schedule.png">
+    </div>
+    <div class="media__body--block">
+      <span class="tab__text">予定</span>
+    </div>
+  </a>
+</div>
+
+<div class="tab media" ng-class="{'tab--current': isCurrentTab('link')}">
+  <a class="media__block" ng-href="#/link/{{! groupId }}/{{! personId }}">
+    <div class="media__image--block">
+      <img class="media__image media__image--normal" src="/static/image/icon/event/link.png">
+    </div>
+    <div class="media__body--block">
+      <span class="tab__text">リンク</span>
     </div>
   </a>
 </div>
