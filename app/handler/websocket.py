@@ -16,6 +16,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 
 	def on_message(self, request):
-		model = Model(request)
+		personId = self.get_secure_cookie('sid')
+
+		model = Model(request, personId)
 		response = model.execute()
 		clients.send(response)

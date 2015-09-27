@@ -8,9 +8,10 @@ from bson.json_util import dumps, loads
 
 
 class Model:
-	def __init__(self, request):
+	def __init__(self, request, personId):
 		self.db = MongoClient('localhost', 27017).test_database
 		self.request = loads(request)
+		self.personId = personId
 
 
 	def execute(self):
@@ -52,14 +53,14 @@ class Model:
 			'body'    : self.request['body'],
 			'groupId' : self.request['groupId'],
 			'personId': self.request['personId'],
-			'created' : datetime.now().strftime('%Y%m%d%H%M%S')
+			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S')
 		}).inserted_id
 
 		return self.__responseWithGroupId('post', 'message', self.db.messages.find_one(pk))
 
 
 	def __response(self, method, model, body):
-		return dumps({'method': method, 'model': model, 'body': body})
+		return dumps({'method': method, 'model': model, 'personId': self.personId, 'body': body})
 
 
 	def __responseWithGroupId(self, method, model, body):

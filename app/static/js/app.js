@@ -40,14 +40,17 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   };
 
   $scope.data = {};
+  $scope.personId = '';
 
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
 	$scope.socket.onMessage(function(r) {
     json = JSON.parse(r.data);
     if (json['method'] == 'get') {
-      if (json['model'] == 'group')
+      if (json['model'] == 'group') {
         $scope.data = $.extend(true, $scope.data, json['body']);
+        $scope.personId = json['personId'];
+      }
       if (json['model'] == 'message')
         $scope.data[json['groupId']]['messages'] = json['body'];
     }
@@ -72,19 +75,17 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
 }])
 
 .controller('MessageController', ['$scope', '$location', '$routeParams', function MessageController($scope, $location, $routeParams) {
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
 
-  $scope.socket.send(JSON.stringify({method: 'get', model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId}));
+  $scope.socket.send(JSON.stringify({method: 'get', model: 'message', groupId: $routeParams.groupId, personId: $scope.personId}));
 
   $scope.post = function(form, body) {
-    $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId, body: body}));
+    $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $routeParams.groupId, personId: $scope.personId, body: body}));
     form.body = '';
   };
 }])
@@ -93,26 +94,22 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
 }])
 
 .controller('AttendanceController', ['$scope', '$location', '$routeParams', function AttendanceController($scope, $location, $routeParams) {
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
 }])
 
 .controller('LinkController', ['$scope', '$location', '$routeParams', function LinkController($scope, $location, $routeParams) {
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
 }])
 
 .controller('CommentController', ['$scope', '$location', '$routeParams', function CommentController($scope, $location, $routeParams) {
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
-  $scope.personId = $routeParams.personId;
 }]);
