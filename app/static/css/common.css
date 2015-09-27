@@ -31,6 +31,10 @@
   height: 100%;
 }
 
+.full-width {
+  width: 100%;
+}
+
 .clearfix:after {
   content: "";
   clear: both;
@@ -71,4 +75,8 @@
 .media__body--block {
   display: table-cell;
   vertical-align: middle;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }

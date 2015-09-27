@@ -35,7 +35,7 @@ class Model:
 
 
 	def getMessages(self):
-		return self.__responseWithGroupId('get', 'message', self.db.messages.find({'groupId': self.request['groupId']}).sort('created', pymongo.ASCENDING))
+		return self.__responseWithGroupId('get', 'message', self.db.messages.find({'groupId': self.request['groupId']}).sort('_id', pymongo.DESCENDING))
 
 
 	def postMessage(self):

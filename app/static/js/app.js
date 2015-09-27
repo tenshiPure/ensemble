@@ -54,7 +54,7 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 
     if (json['method'] == 'post') {
       if (json['model'] == 'message')
-        $scope.data[json['groupId']]['messages'].push(json['body']);
+        $scope.data[json['groupId']]['messages'].unshift(json['body']);
     }
   });
 }])
@@ -78,8 +78,9 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 
   $scope.socket.send(JSON.stringify({method: 'get', model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId}));
 
-  $scope.post = function(body) {
+  $scope.post = function(form, body) {
     $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $routeParams.groupId, personId: $routeParams.personId, body: body}));
+    form.body = '';
   };
 }])
 

@@ -7,12 +7,21 @@
 
   <div ng-include="'include?name=tab'" class="clearfix"></div>
 
-  <input type="text" ng-model="body">
-  <input type="button" value="send" ng-click="post(body)">
+  <div id="layout-contents__body">
+    <form name="form" class="contents-form" novalidate ng-submit="post(this, body)">
+      <textarea name="body" ng-model="body" required placeholder="メッセージを入力（必須）"></textarea>
+      <input type="submit" value="send" ng-disabled="form.$invalid">
+    </form>
 
-  <ul>
-    <li ng-repeat="message in data[groupId].messages">
-      {{! message.body }}
-    </li>
-  </ul>
+    <div class="media full-width" ng-repeat="message in data[groupId].messages">
+      <hr>
+
+      <div class="media__block">
+        <div class="media__image--block">
+          <img class="media__image media__image--large" src="/static/image/icon/person/hoge.png">
+        </div>
+        <div class="media__body--block pre-wrap">{{! message.body }}</div>
+      </div>
+    </div>
+  </div>
 </div>

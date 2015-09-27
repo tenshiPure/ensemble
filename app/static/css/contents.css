@@ -25,3 +25,17 @@
     width: 100%;
   }
 }
+
+#layout-contents__body {
+  background-color: #eee;
+  padding: 8px;
+}
+
+.contents-form {
+  margin: 5px 0 0 5px;
+}
+
+.contents-form > textarea {
+  width: 100%;
+  height: 4rem;
+}
