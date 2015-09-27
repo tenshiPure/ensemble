@@ -36,3 +36,39 @@
   clear: both;
   display: block;
 }
+
+
+/**
+ * メディア
+ */
+.media {
+  display: table;
+}
+
+.media__block {
+  display: block;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.media__image--block {
+  display: table-cell;
+  padding-right: 0.5rem;
+}
+
+.media__image {
+  display: block;
+}
+
+.media__image--normal {
+  height: 2rem;
+}
+
+.media__image--large {
+  height: 4rem;
+}
+
+.media__body--block {
+  display: table-cell;
+  vertical-align: middle;
+}

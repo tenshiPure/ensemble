@@ -1,0 +1,25 @@
+.tab {
+  background-color: #CCF;
+  float: left;
+  margin-right: 1rem;
+  width: 9rem;
+  height: 2rem;
+  -webkit-border-top-left-radius: 13px;
+  -webkit-border-top-right-radius: 13px;
+}
+
+@media screen and (min-width: 768px) {
+  .tab {
+    width: 9rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .tab {
+    width: 3rem;
+  }
+
+  .tab__text {
+    display: none;
+  }
+}

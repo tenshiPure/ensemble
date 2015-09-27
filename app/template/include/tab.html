@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="{{ static_url("css/include/tab.css") }}">
+
+<div class="tab media" ng-repeat="(page, name) in {event: 'イベント', message: 'メッセージ', schedule: '予定', link: 'リンク'}">
+  <a class="media__block" ng-href="#/{{! page }}/{{! groupId }}/{{! personId }}">
+    <div class="media__image--block">
+      <img class="media__image media__image--normal" src="/static/image/icon/event/{{! page }}.png">
+    </div>
+    <div class="media__body--block">
+      <span class="tab__text">{{! name }}</span>
+    </div>
+  </a>
+</div>
