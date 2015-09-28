@@ -20,10 +20,14 @@ class Model:
 				return self.getGroups()
 			if self.request['model'] == 'message':
 				return self.getMessages()
+			if self.request['model'] == 'schedule':
+				return self.getSchedule()
 
 		if self.request['method'] == 'post':
 			if self.request['model'] == 'message':
 				return self.postMessage()
+			if self.request['model'] == 'schedule':
+				return self.postSchedule()
 
 
 	def getGroups(self):
@@ -31,7 +35,7 @@ class Model:
 		for group in loads(dumps(self.db.groups.find())):
 			groupId = str(group['_id'])
 			events = self.db.events.find({'groupId': groupId}).sort('_id', pymongo.ASCENDING)
-			groups[groupId] = {'name': group['name'], 'events': events, 'messages': []}
+			groups[groupId] = {'name': group['name'], 'events': events, 'messages': [], 'schedules': []}
 
 		return self.__response('get', 'group', groups)
 
@@ -48,6 +52,18 @@ class Model:
 		return self.__responseWithGroupId('get', 'message', map(join, messages))
 
 
+	def getSchedule(self):
+		schedules = self.db.schedules.find({'groupId': self.request['groupId']}).sort('_id', pymongo.DESCENDING)
+
+		def join(schedule):
+			personId = schedule['personId']
+			person = self.db.persons.find_one({'_id': ObjectId(personId)})
+			schedule['person'] = person
+			return schedule
+
+		return self.__responseWithGroupId('get', 'schedule', map(join, schedules))
+
+
 	def postMessage(self):
 		pk = self.db.messages.insert_one({
 			'body'    : self.request['body'],
@@ -57,6 +73,19 @@ class Model:
 		}).inserted_id
 
 		return self.__responseWithGroupId('post', 'message', self.db.messages.find_one(pk))
+
+
+	def postSchedule(self):
+		pk = self.db.schedules.insert_one({
+			'day'     : self.request['day'],
+			'place'   : self.request['place'],
+			'note'    : self.request['note'],
+			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+			'groupId' : self.request['groupId'],
+			'personId': self.request['personId'],
+		}).inserted_id
+
+		return self.__responseWithGroupId('post', 'schedule', self.db.schedules.find_one(pk))
 
 
 	def __response(self, method, model, body):

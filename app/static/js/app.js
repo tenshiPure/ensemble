@@ -53,11 +53,15 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
       }
       if (json['model'] == 'message')
         $scope.data[json['groupId']]['messages'] = json['body'];
+      if (json['model'] == 'schedule')
+        $scope.data[json['groupId']]['schedules'] = json['body'];
     }
 
     if (json['method'] == 'post') {
       if (json['model'] == 'message')
         $scope.data[json['groupId']]['messages'].unshift(json['body']);
+      if (json['model'] == 'schedule')
+        $scope.data[json['groupId']]['schedules'].unshift(json['body']);
     }
   });
 
@@ -94,6 +98,15 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
+
+  $scope.socket.send(JSON.stringify({method: 'get', model: 'schedule', groupId: $routeParams.groupId, personId: $scope.personId}));
+
+  $scope.post = function(form, day, place, note) {
+    $scope.socket.send(JSON.stringify({method: 'post', model: 'schedule', groupId: $routeParams.groupId, personId: $scope.personId, day: day, place: place, note: note}));
+    form.day = '';
+    form.place = '';
+    form.note = '';
+  };
 }])
 
 .controller('AttendanceController', ['$scope', '$location', '$routeParams', function AttendanceController($scope, $location, $routeParams) {
