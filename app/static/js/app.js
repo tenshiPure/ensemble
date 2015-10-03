@@ -33,18 +33,19 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 	$scope.socket.onMessage(function(r) {
     json = JSON.parse(r.data);
 
-    if (json['method'] == 'get') {
-      if (json['action'] == 'groups') {
-        $scope.groups = json['body'];
+    if (json.method === 'get') {
+      if (json.action === 'groups') {
+        $scope.groups = json.body;
       }
-      if (json['action'] == 'content') {
-        $scope.content = json['body'];
+      if (json.action === 'content') {
+        if (Object.keys($scope.content).length === 0 || $scope.content.group._id.$oid === json.body.group._id.$oid)
+          $scope.content = json.body;
       }
     }
 
-    if (json['method'] == 'post') {
-      if (json['action'] == 'message')
-        $scope.content.messages.push(json['body']);
+    if (json.method === 'post') {
+      if (json.action === 'message' && $scope.content.group._id.$oid === json.body.groupId)
+        $scope.content.messages.push(json.body);
     }
   });
 

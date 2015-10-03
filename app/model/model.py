@@ -51,3 +51,7 @@ class Model:
 
 	def response(self, method, action, body):
 		return dumps({'method': method, 'action': action, 'body': body})
+
+
+	def responseWithGroupId(self, method, action, body):
+		return dumps({'method': method, 'action': action, 'body': body, 'groupId': self.request['groupId']})
