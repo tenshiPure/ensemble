@@ -1,9 +1,13 @@
 <div id="layout-contents">
   <p id="layout-group-name">
-    グループ1
+    {{! content.group.name }}
   </p>
 
   <div ng-include="'include?name=tab'" class="clearfix"></div>
 
-  <pre>{{! content|json }}</pre>
+  <ul>
+    <li ng-repeat="message in content.messages">
+      {{! message.body }}
+    </li>
+  </ul>
 </div>

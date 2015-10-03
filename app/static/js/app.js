@@ -2,8 +2,8 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'view?name=group',
-      controller: 'GroupController'
+      templateUrl: 'view?name=groups',
+      controller: 'GroupsController'
     })
     .when('/message/:groupId', {
       templateUrl: 'view?name=message',
@@ -34,6 +34,12 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     json = JSON.parse(r.data);
 
     if (json['method'] == 'get') {
+      if (json['action'] == 'groups') {
+        $scope.groups = json['body'];
+      }
+      if (json['action'] == 'content') {
+        $scope.content = json['body'];
+      }
     }
 
     if (json['method'] == 'post') {
@@ -41,11 +47,13 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   });
 }])
 
-.controller('GroupController', ['$scope', '$routeParams', function GroupController($scope, $routeParams) {
-  $scope.socket.send(JSON.stringify({method: 'get', model: 'group', personId: $scope.personId}));
+.controller('GroupsController', ['$scope', '$routeParams', function GroupsController($scope, $routeParams) {
+  $scope.socket.send(JSON.stringify({method: 'get', action: 'groups'}));
 }])
 
 .controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
+  $scope.socket.send(JSON.stringify({method: 'get', action: 'content', groupId: $routeParams.groupId}));
+
   $scope.post = function(form, body) {
     $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $scope.content.groupId, personId: $scope.personId, body: body}));
     form.body = '';

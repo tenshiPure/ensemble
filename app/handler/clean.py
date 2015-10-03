@@ -36,4 +36,4 @@ class CleanHandler(tornado.web.RequestHandler):
 		db.events.insert_one({'body': u'新規イベント2', 'created': now, 'groupId': group1})
 		db.events.insert_one({'body': u'新規イベント3', 'created': now, 'groupId': group2})
 
-		self.redirect('/')
+		self.redirect('/login')
