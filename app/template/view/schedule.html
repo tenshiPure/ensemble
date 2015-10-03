@@ -9,23 +9,23 @@
 
   <div id="layout-contents__body">
     <form name="form" class="contents-form" novalidate ng-submit="post(this, day, place, note)">
-	  <input type="text" name="day"   ng-model="day"   required placeholder="練習日（必須）">
-	  <input type="text" name="place" ng-model="place" required placeholder="場所（必須）">
-	  <input type="text" name="note"  ng-model="note"           placeholder="備考">
+      <input type="text" name="day"   ng-model="day"   required placeholder="練習日（必須）">
+      <input type="text" name="place" ng-model="place" required placeholder="場所（必須）">
+      <input type="text" name="note"  ng-model="note"           placeholder="備考">
       <input type="submit" value="send" ng-disabled="form.$invalid">
     </form>
 
     <div class="media full-width" ng-repeat="schedule in data[groupId].schedules">
       <hr>
 
-      <div class="media__block">
+      <a class="media__block" href="#/attendance/{{! groupId }}/{{! personId }}/{{! schedule._id.$oid }}">
         <div class="media__image--block">
           <img class="media__image media__image--normal" src="/static/image/icon/event/schedule.png">
         </div>
         <div class="media__body--block">
           <span>{{! schedule.day }} ({{! schedule.place }})</span>
         </div>
-      </div>
+      </a>
     </div>
 
   </div>

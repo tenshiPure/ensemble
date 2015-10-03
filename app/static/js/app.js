@@ -46,6 +46,7 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 
 	$scope.socket.onMessage(function(r) {
     json = JSON.parse(r.data);
+
     if (json['method'] == 'get') {
       if (json['model'] == 'group') {
         $scope.data = $.extend(true, $scope.data, json['body']);
@@ -55,6 +56,8 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
         $scope.data[json['groupId']]['messages'] = json['body'];
       if (json['model'] == 'schedule')
         $scope.data[json['groupId']]['schedules'] = json['body'];
+      if (json['model'] == 'attendance')
+        $scope.data[json['groupId']]['attendances'] = json['body'];
     }
 
     if (json['method'] == 'post') {
@@ -62,6 +65,8 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
         $scope.data[json['groupId']]['messages'].unshift(json['body']);
       if (json['model'] == 'schedule')
         $scope.data[json['groupId']]['schedules'].unshift(json['body']);
+      if (json['model'] == 'attendance')
+        $scope.data[json['groupId']]['attendances'].unshift(json['body']);
     }
   });
 
@@ -113,6 +118,14 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
 
   $scope.groupId = $routeParams.groupId;
+
+  $scope.socket.send(JSON.stringify({method: 'get', model: 'attendance', scheduleId: $routeParams.scheduleId, groupId: $routeParams.groupId, personId: $scope.personId}));
+
+  $scope.post = function(form, choice, note) {
+    $scope.socket.send(JSON.stringify({method: 'post', model: 'attendance', scheduleId: $routeParams.scheduleId, groupId: $routeParams.groupId, personId: $scope.personId, choice: choice, note: note}));
+    form.choice = '';
+    form.note = '';
+  };
 }])
 
 .controller('LinkController', ['$scope', '$location', '$routeParams', function LinkController($scope, $location, $routeParams) {

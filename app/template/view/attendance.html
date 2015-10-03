@@ -1,3 +1,31 @@
-<div ng-include="'include?name=group'"></div>
+<div ng-include="'include?name=group'" id="layout-groups" class="clearfix full-height"></div>
 
-<div ng-include="'include?name=nav'"></div>
+<div id="layout-contents">
+  <p id="layout-group-name">
+    {{! data[groupId].name }}
+  </p>
+
+  <div ng-include="'include?name=tab'" class="clearfix"></div>
+
+  <div id="layout-contents__body">
+    <form name="form" class="contents-form" novalidate ng-submit="post(this, choice, note)">
+      <input type="text" name="choice" ng-model="choice" required placeholder="選択">
+      <input type="text" name="note"   ng-model="note"            placeholder="一言">
+      <input type="submit" value="send" ng-disabled="form.$invalid">
+    </form>
+
+    <div class="media full-width" ng-repeat="attendance in data[groupId].attendances">
+      <hr>
+
+      <div class="media__block">
+        <div class="media__image--block">
+          <img class="media__image media__image--normal" src="/static/image/icon/person/{{! attendance.person.icon }}">
+        </div>
+        <div class="media__body--block">
+          <span>{{! attendance.choice }} ({{! attendance.note }})</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

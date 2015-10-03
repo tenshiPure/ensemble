@@ -22,7 +22,7 @@
   </a>
 </div>
 
-<div class="tab media" ng-class="{'tab--current': isCurrentTab('schedule')}">
+<div class="tab media" ng-class="{'tab--current': isCurrentTab('schedule') || isCurrentTab('attendance') }">
   <a class="media__block" ng-href="#/schedule/{{! groupId }}/{{! personId }}">
     <div class="media__image--block">
       <img class="media__image media__image--normal" src="/static/image/icon/event/schedule.png">
@@ -33,7 +33,7 @@
   </a>
 </div>
 
-<div class="tab media" ng-class="{'tab--current': isCurrentTab('link')}">
+<div class="tab media" ng-class="{'tab--current': isCurrentTab('link') || isCurrentTab('comment') }">
   <a class="media__block" ng-href="#/link/{{! groupId }}/{{! personId }}">
     <div class="media__image--block">
       <img class="media__image media__image--normal" src="/static/image/icon/event/link.png">
