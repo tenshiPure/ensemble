@@ -5,29 +5,9 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
       templateUrl: 'view?name=group',
       controller: 'GroupController'
     })
-    .when('/event/:groupId/:personId', {
-      templateUrl: 'view?name=event',
-      controller: 'EventController'
-    })
-    .when('/message/:groupId/:personId', {
+    .when('/message/:groupId', {
       templateUrl: 'view?name=message',
       controller: 'MessageController'
-    })
-    .when('/schedule/:groupId/:personId', {
-      templateUrl: 'view?name=schedule',
-      controller: 'ScheduleController'
-    })
-    .when('/attendance/:groupId/:personId/:scheduleId', {
-      templateUrl: 'view?name=attendance',
-      controller: 'AttendanceController'
-    })
-    .when('/link/:groupId/:personId', {
-      templateUrl: 'view?name=link',
-      controller: 'LinkController'
-    })
-    .when('/comment/:groupId/:personId/:linkId', {
-      templateUrl: 'view?name=comment',
-      controller: 'CommentController'
     })
     .otherwise({
       redirectTo: '/'
@@ -39,8 +19,14 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     return location.hash.indexOf(current) !== -1;
   };
 
-  $scope.data = {};
-  $scope.personId = '';
+  $scope.format = function(string) {
+    var date = new Date(Date.parse(string));
+    return $filter('date')(date, 'MM/dd HH:mm:ss');
+  };
+
+  $scope.personId = '1';
+  $scope.groups = [];
+  $scope.content = {};
 
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
@@ -48,94 +34,20 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     json = JSON.parse(r.data);
 
     if (json['method'] == 'get') {
-      if (json['model'] == 'group') {
-        $scope.data = $.extend(true, $scope.data, json['body']);
-        $scope.personId = json['personId'];
-      }
-      if (json['model'] == 'message')
-        $scope.data[json['groupId']]['messages'] = json['body'];
-      if (json['model'] == 'schedule')
-        $scope.data[json['groupId']]['schedules'] = json['body'];
-      if (json['model'] == 'attendance')
-        $scope.data[json['groupId']]['attendances'] = json['body'];
     }
 
     if (json['method'] == 'post') {
-      if (json['model'] == 'message')
-        $scope.data[json['groupId']]['messages'].unshift(json['body']);
-      if (json['model'] == 'schedule')
-        $scope.data[json['groupId']]['schedules'].unshift(json['body']);
-      if (json['model'] == 'attendance')
-        $scope.data[json['groupId']]['attendances'].unshift(json['body']);
     }
   });
-
-  $scope.format = function(string) {
-    var date = new Date(Date.parse(string));
-    return $filter('date')(date, 'MM/dd HH:mm:ss');
-  };
 }])
 
 .controller('GroupController', ['$scope', '$routeParams', function GroupController($scope, $routeParams) {
-  $scope.socket.send(JSON.stringify({method: 'get', model: 'group', personId: $routeParams.personId}));
+  $scope.socket.send(JSON.stringify({method: 'get', model: 'group', personId: $scope.personId}));
 }])
 
-.controller('EventController', ['$scope', '$location', '$routeParams', function EventController($scope, $location, $routeParams) {
-  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
-
-  $scope.groupId = $routeParams.groupId;
-}])
-
-.controller('MessageController', ['$scope', '$location', '$routeParams', function MessageController($scope, $location, $routeParams) {
-  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
-
-  $scope.groupId = $routeParams.groupId;
-
-  $scope.socket.send(JSON.stringify({method: 'get', model: 'message', groupId: $routeParams.groupId, personId: $scope.personId}));
-
+.controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
   $scope.post = function(form, body) {
-    $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $routeParams.groupId, personId: $scope.personId, body: body}));
+    $scope.socket.send(JSON.stringify({method: 'post', model: 'message', groupId: $scope.content.groupId, personId: $scope.personId, body: body}));
     form.body = '';
   };
-}])
-
-.controller('ScheduleController', ['$scope', '$location', '$routeParams', function ScheduleController($scope, $location, $routeParams) {
-  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
-
-  $scope.groupId = $routeParams.groupId;
-
-  $scope.socket.send(JSON.stringify({method: 'get', model: 'schedule', groupId: $routeParams.groupId, personId: $scope.personId}));
-
-  $scope.post = function(form, day, place, note) {
-    $scope.socket.send(JSON.stringify({method: 'post', model: 'schedule', groupId: $routeParams.groupId, personId: $scope.personId, day: day, place: place, note: note}));
-    form.day = '';
-    form.place = '';
-    form.note = '';
-  };
-}])
-
-.controller('AttendanceController', ['$scope', '$location', '$routeParams', function AttendanceController($scope, $location, $routeParams) {
-  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
-
-  $scope.groupId = $routeParams.groupId;
-
-  $scope.socket.send(JSON.stringify({method: 'get', model: 'attendance', scheduleId: $routeParams.scheduleId, groupId: $routeParams.groupId, personId: $scope.personId}));
-
-  $scope.post = function(form, choice, note) {
-    $scope.socket.send(JSON.stringify({method: 'post', model: 'attendance', scheduleId: $routeParams.scheduleId, groupId: $routeParams.groupId, personId: $scope.personId, choice: choice, note: note}));
-    form.choice = '';
-    form.note = '';
-  };
-}])
-
-.controller('LinkController', ['$scope', '$location', '$routeParams', function LinkController($scope, $location, $routeParams) {
-  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
-
-  $scope.groupId = $routeParams.groupId;
-}])
-
-.controller('CommentController', ['$scope', '$location', '$routeParams', function CommentController($scope, $location, $routeParams) {
-  if (Object.keys($scope.data).length === 0) { $location.path('/'); return; }
-
-  $scope.groupId = $routeParams.groupId;
 }]);
