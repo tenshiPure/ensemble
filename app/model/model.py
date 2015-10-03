@@ -21,6 +21,10 @@ class Model:
 			if self.request['action'] == 'content':
 				return self.getContent()
 
+		if self.request['method'] == 'post':
+			if self.request['action'] == 'message':
+				return self.postMessage()
+
 
 	def getGroups(self):
 		def join(group):
@@ -40,6 +44,18 @@ class Model:
 		messages = self.db.messages.find({'groupId': groupId})
 
 		return self.__response('get', 'content', {'group': group, 'messages': messages})
+
+
+	def postMessage(self):
+		pk = self.db.messages.insert_one({
+			'body'    : self.request['body'],
+			'groupId' : self.request['groupId'],
+			'personId': self.personId,
+			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+		}).inserted_id
+
+		return self.__response('post', 'message', self.db.messages.find_one(pk))
+
 
 	def __response(self, method, action, body):
 		return dumps({'method': method, 'action': action, 'body': body})

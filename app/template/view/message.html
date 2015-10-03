@@ -5,6 +5,11 @@
 
   <div ng-include="'include?name=tab'" class="clearfix"></div>
 
+  <form class="contents-form" name="form" novalidate ng-submit="post(this, body)">
+    <textarea name="body" ng-model="body" required placeholder="メッセージを入力（必須）"></textarea>
+    <input type="submit" value="send" ng-disabled="form.$invalid">
+  </form>
+
   <ul>
     <li ng-repeat="message in content.messages">
       {{! message.body }}
