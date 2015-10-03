@@ -47,17 +47,22 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
         $scope.content.messages.push(json['body']);
     }
   });
+
+  $scope.send = function(method, action, others) {
+    json = JSON.stringify(angular.extend({method: method, action: action}, others));
+    $scope.socket.send(json);
+  };
 }])
 
 .controller('GroupsController', ['$scope', '$routeParams', function GroupsController($scope, $routeParams) {
-  $scope.socket.send(JSON.stringify({method: 'get', action: 'groups'}));
+  $scope.send('get', 'groups', {});
 }])
 
 .controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
-  $scope.socket.send(JSON.stringify({method: 'get', action: 'content', groupId: $routeParams.groupId}));
+  $scope.send('get', 'content', {groupId: $routeParams.groupId});
 
   $scope.post = function(form, body) {
-    $scope.socket.send(JSON.stringify({method: 'post', action: 'message', groupId: $scope.content.group._id.$oid, body: body}));
+    $scope.send('post', 'message', {groupId: $scope.content.group._id.$oid, body: body});
     form.body = '';
   };
 }]);

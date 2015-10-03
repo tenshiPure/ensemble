@@ -15,15 +15,7 @@ class Model:
 
 
 	def execute(self):
-		if self.request['method'] == 'get':
-			if self.request['action'] == 'groups':
-				return self.getGroups()
-			if self.request['action'] == 'content':
-				return self.getContent()
-
-		if self.request['method'] == 'post':
-			if self.request['action'] == 'message':
-				return self.postMessage()
+		return getattr(self, '%s%s' % (self.request['method'], self.request['action'].capitalize()))()
 
 
 	def getGroups(self):
@@ -35,7 +27,7 @@ class Model:
 
 		groups = [join(group) for group in self.db.groups.find()]
 
-		return self.__response('get', 'groups', groups)
+		return self.response('get', 'groups', groups)
 
 
 	def getContent(self):
@@ -43,7 +35,7 @@ class Model:
 		group = self.db.groups.find_one({'_id': ObjectId(groupId)})
 		messages = self.db.messages.find({'groupId': groupId})
 
-		return self.__response('get', 'content', {'group': group, 'messages': messages})
+		return self.response('get', 'content', {'group': group, 'messages': messages})
 
 
 	def postMessage(self):
@@ -54,8 +46,8 @@ class Model:
 			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S')
 		}).inserted_id
 
-		return self.__response('post', 'message', self.db.messages.find_one(pk))
+		return self.response('post', 'message', self.db.messages.find_one(pk))
 
 
-	def __response(self, method, action, body):
+	def response(self, method, action, body):
 		return dumps({'method': method, 'action': action, 'body': body})
