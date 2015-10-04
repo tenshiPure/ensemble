@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="{{ static_url("css/include/tab.css") }}">
 
 <div class="tab media" ng-class="{'tab--current': isCurrentTab('event')}">
-  <a class="media__block" ng-href="#/event/{{! groupId }}/{{! personId }}">
+  <a class="media__block" ng-href="#/event/{{! groupId }}">
     <div class="media__image--block">
       <img class="media__image media__image--normal" src="/static/image/icon/event/event.png">
     </div>
@@ -12,7 +12,7 @@
 </div>
 
 <div class="tab media" ng-class="{'tab--current': isCurrentTab('message')}">
-  <a class="media__block" ng-href="#/message/{{! groupId }}/{{! personId }}">
+  <a class="media__block" ng-href="#/message/{{! groupId }}">
     <div class="media__image--block">
       <img class="media__image media__image--normal" src="/static/image/icon/event/message.png">
     </div>
@@ -23,7 +23,7 @@
 </div>
 
 <div class="tab media" ng-class="{'tab--current': isCurrentTab('schedule') || isCurrentTab('attendance') }">
-  <a class="media__block" ng-href="#/schedule/{{! groupId }}/{{! personId }}">
+  <a class="media__block" ng-href="#/schedule/{{! groupId }}">
     <div class="media__image--block">
       <img class="media__image media__image--normal" src="/static/image/icon/event/schedule.png">
     </div>
@@ -34,7 +34,7 @@
 </div>
 
 <div class="tab media" ng-class="{'tab--current': isCurrentTab('link') || isCurrentTab('comment') }">
-  <a class="media__block" ng-href="#/link/{{! groupId }}/{{! personId }}">
+  <a class="media__block" ng-href="#/link/{{! groupId }}">
     <div class="media__image--block">
       <img class="media__image media__image--normal" src="/static/image/icon/event/link.png">
     </div>

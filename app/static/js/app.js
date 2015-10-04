@@ -34,13 +34,10 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     json = JSON.parse(r.data);
 
     if (json.method === 'get') {
-      if (json.action === 'groups') {
+      if (json.action === 'groups')
         $scope.groups = json.body;
-      }
-      if (json.action === 'content') {
-        if (Object.keys($scope.content).length === 0 || $scope.content.group._id.$oid === json.body.group._id.$oid)
-          $scope.content = json.body;
-      }
+      if (json.action === 'content')
+        $scope.content = json.body;
     }
 
     if (json.method === 'post') {
@@ -55,11 +52,13 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   };
 }])
 
-.controller('GroupsController', ['$scope', '$routeParams', function GroupsController($scope, $routeParams) {
+.controller('GroupsController', ['$scope', function GroupsController($scope) {
   $scope.send('get', 'groups', {});
 }])
 
 .controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
+  $scope.groupId = $routeParams.groupId;
+
   $scope.send('get', 'content', {groupId: $routeParams.groupId});
 
   $scope.post = function(form, body) {

@@ -1,6 +1,3 @@
-from bson.json_util import loads
-
-
 class Clients:
 	def __init__(self):
 		self.vals = []
