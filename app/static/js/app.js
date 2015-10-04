@@ -9,12 +9,20 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
       templateUrl: 'view?name=message',
       controller: 'MessageController'
     })
+    .when('/schedule/:groupId', {
+      templateUrl: 'view?name=schedule',
+      controller: 'ScheduleController'
+    })
+    .when('/attendance/:groupId/:scheduleId', {
+      templateUrl: 'view?name=attendance',
+      controller: 'AttendanceController'
+    })
     .otherwise({
       redirectTo: '/'
     });
 }])
 
-.controller('RootController', ['$scope', '$websocket', '$filter', function RootController($scope, $websocket, $filter) {
+.controller('RootController', ['$scope', '$websocket', '$filter', function($scope, $websocket, $filter) {
   $scope.isCurrentTab = function(current) {
     return location.hash.indexOf(current) !== -1;
   };
@@ -52,17 +60,31 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   };
 }])
 
-.controller('GroupsController', ['$scope', function GroupsController($scope) {
+.controller('GroupsController', ['$scope', function($scope) {
   $scope.send('get', 'groups', {});
 }])
 
-.controller('MessageController', ['$scope', '$routeParams', function MessageController($scope, $routeParams) {
+.controller('MessageController', ['$scope', '$routeParams', function($scope, $routeParams) {
   $scope.groupId = $routeParams.groupId;
-
-  $scope.send('get', 'content', {groupId: $routeParams.groupId});
 
   $scope.post = function(form, body) {
     $scope.send('post', 'message', {groupId: $scope.content.group._id.$oid, body: body});
     form.body = '';
+  };
+}])
+
+.controller('ScheduleController', ['$scope', '$routeParams', function($scope, $routeParams) {
+  $scope.groupId = $routeParams.groupId;
+
+  $scope.send('get', 'content', {groupId: $routeParams.groupId});
+
+  $scope.post = function(form) {
+  };
+}])
+
+.controller('AttendanceController', ['$scope', '$routeParams', function($scope, $routeParams) {
+  $scope.groupId = $routeParams.groupId;
+
+  $scope.post = function(form) {
   };
 }]);

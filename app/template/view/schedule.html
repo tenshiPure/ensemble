@@ -1,0 +1,17 @@
+<div id="layout-contents">
+  <p id="layout-group-name">
+    {{! content.group.name }}
+  </p>
+
+  <div ng-include="'include?name=tab'" class="clearfix"></div>
+
+  <form class="contents-form" name="form" novalidate ng-submit="post(this)">
+    <input type="submit" value="send" ng-disabled="form.$invalid">
+  </form>
+
+  <ul>
+    <li ng-repeat="schedule in content.schedules">
+      <a ng-href="#/attendance/{{! groupId }}/{{! schedule._id.$oid }}">{{! schedule.day }}</pre>
+    </li>
+  </ul>
+</div>
