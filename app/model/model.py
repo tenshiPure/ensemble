@@ -33,10 +33,11 @@ class Model:
 	def getContent(self):
 		groupId = self.request['groupId']
 		group = self.db.groups.find_one({'_id': ObjectId(groupId)})
+		events = self.db.events.find({'groupId': groupId})
 		messages = [self.joinPerson(message) for message in self.db.messages.find({'groupId': groupId})]
 		schedules = [schedule for schedule in self.db.schedules.find({'groupId': groupId})]
 
-		return self.response('get', 'content', {'group': group, 'messages': messages, 'schedules': schedules})
+		return self.response('get', 'content', {'group': group, 'events': events, 'messages': messages, 'schedules': schedules})
 
 
 	def getAttendances(self):

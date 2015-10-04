@@ -5,6 +5,10 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
       templateUrl: 'view?name=groups',
       controller: 'GroupsController'
     })
+    .when('/event/:groupId', {
+      templateUrl: 'view?name=event',
+      controller: 'EventController'
+    })
     .when('/message/:groupId', {
       templateUrl: 'view?name=message',
       controller: 'MessageController'
@@ -72,35 +76,45 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
   $scope.send('get', 'groups', {});
 }])
 
-.controller('MessageController', ['$scope', '$routeParams', function($scope, $routeParams) {
+.controller('EventController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+  $scope.groupId = $routeParams.groupId;
+
+  $scope.send('get', 'content', {groupId: $scope.groupId});
+}])
+
+.controller('MessageController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+  guard($location, $scope);
+
   $scope.groupId = $routeParams.groupId;
 
   $scope.post = function(form, body) {
-    $scope.send('post', 'message', {groupId: $scope.content.group._id.$oid, body: body});
+    $scope.send('post', 'message', {groupId: $scope.groupId, body: body});
     form.body = '';
   };
 }])
 
-.controller('ScheduleController', ['$scope', '$routeParams', function($scope, $routeParams) {
+.controller('ScheduleController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+  guard($location, $scope);
+
   $scope.groupId = $routeParams.groupId;
 
-  $scope.send('get', 'content', {groupId: $routeParams.groupId});
-
   $scope.post = function(form, day, place, note) {
-    $scope.send('post', 'schedule', {groupId: $scope.content.group._id.$oid, day: day, place: place, note: note});
+    $scope.send('post', 'schedule', {groupId: $scope.groupId, day: day, place: place, note: note});
     form.day = '';
     form.place = '';
     form.note = '';
   };
 }])
 
-.controller('AttendanceController', ['$scope', '$routeParams', function($scope, $routeParams) {
+.controller('AttendanceController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+  guard($location, $scope);
+
   $scope.groupId = $routeParams.groupId;
 
   $scope.send('get', 'attendances', {scheduleId: $routeParams.scheduleId});
 
   $scope.post = function(form, choice, note) {
-    $scope.send('post', 'attendance', {groupId: $scope.content.group._id.$oid, choice: choice, note: note, scheduleId: $routeParams.scheduleId});
+    $scope.send('post', 'attendance', {groupId: $scope.groupId, choice: choice, note: note, scheduleId: $routeParams.scheduleId});
     form.choice = '';
     form.note = '';
   };
@@ -114,4 +128,9 @@ isCurrentGroup = function($scope, json) {
 
 isCurrentAttendance = function($scope, json) {
   return ($scope.subcontent.schedule !== undefined) && ($scope.subcontent.schedule._id.$oid === json.body.scheduleId);
+};
+
+
+guard = function($location, $scope) {
+  if (Object.keys($scope.content).length === 0) { $location.path('/'); }
 };
