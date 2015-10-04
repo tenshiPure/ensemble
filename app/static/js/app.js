@@ -57,12 +57,16 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     }
 
     if (json.method === 'post') {
-      if (json.action === 'message' && isCurrentGroup($scope, json))
-        $scope.content.messages.push(json.body);
-      if (json.action === 'schedule' && isCurrentGroup($scope, json))
+      if (json.action === 'message' && isCurrentGroup($scope, json.body.message.groupId)) {
+        $scope.content.messages.push(json.body.message);
+        $scope.content.events.push(json.body.events);
+      }
+      if (json.action === 'schedule' && isCurrentGroup($scope, json.body.schedule.groupId)) {
         $scope.content.schedules.push(json.body);
-      if (json.action === 'attendance' && isCurrentAttendance($scope, json))
+      }
+      if (json.action === 'attendance' && isCurrentAttendance($scope, json.body.attendance.scheduleId)) {
         $scope.subcontent.attendances.push(json.body);
+      }
     }
   });
 
@@ -121,13 +125,13 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 }]);
 
 
-isCurrentGroup = function($scope, json) {
-  return $scope.content.group._id.$oid === json.body.groupId;
+isCurrentGroup = function($scope, groupId) {
+  return $scope.content.group._id.$oid === groupId;
 };
 
 
-isCurrentAttendance = function($scope, json) {
-  return ($scope.subcontent.schedule !== undefined) && ($scope.subcontent.schedule._id.$oid === json.body.scheduleId);
+isCurrentAttendance = function($scope, scheduleId) {
+  return ($scope.subcontent.schedule !== undefined) && ($scope.subcontent.schedule._id.$oid === scheduleId);
 };
 
 

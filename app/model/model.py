@@ -64,7 +64,16 @@ class Model:
 			'personId': self.personId
 		}).inserted_id
 
-		return self.response('post', 'message', self.db.messages.find_one(pk))
+		epk = self.db.events.insert_one({
+			'type'      : 'message',
+			'body'      : self.request['body'],
+			'created'   : datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+			'messageId' : pk,
+			'groupId'   : self.request['groupId'],
+			'person'    : self.db.persons.find_one(ObjectId(self.personId))
+		}).inserted_id
+
+		return self.response('post', 'message', {'message': self.db.messages.find_one(pk), 'event': self.db.events.find_one(epk)})
 
 
 	def postSchedule(self):
@@ -95,7 +104,3 @@ class Model:
 
 	def response(self, method, action, body):
 		return dumps({'method': method, 'action': action, 'body': body})
-
-
-	def responseWithGroupId(self, method, action, body):
-		return dumps({'method': method, 'action': action, 'body': body, 'groupId': self.request['groupId']})
