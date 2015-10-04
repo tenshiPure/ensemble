@@ -7,7 +7,20 @@
 
   <ul>
     <li ng-repeat="event in content.events">
-      <pre>{{! event|json }}</pre>
+      <div ng-if="event.type === 'message'">
+        {{! event.person.name }}がメッセージを作成しました<br>
+        <a ng-href="#/message/{{! event.groupId }}">{{! event.body }}</a>
+      </div>
+
+      <div ng-if="event.type === 'schedule'">
+        {{! event.person.name }}が予定を作成しました<br>
+        <a ng-href="#/schedule/{{! event.groupId }}">{{! event.day }}</a>
+      </div>
+
+      <div ng-if="event.type === 'attendance'">
+        {{! event.person.name }}が出欠を作成しました<br>
+        <a ng-href="#/attendance/{{! event.groupId }}/{{! event.scheduleId}} ">{{! event.choice }}</a>
+      </div>
     </li>
   </ul>
 </div>
