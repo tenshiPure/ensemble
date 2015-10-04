@@ -33,7 +33,7 @@ class Model:
 	def getContent(self):
 		groupId = self.request['groupId']
 		group = self.db.groups.find_one({'_id': ObjectId(groupId)})
-		messages = self.db.messages.find({'groupId': groupId})
+		messages = [self.joinPerson(message) for message in self.db.messages.find({'groupId': groupId})]
 
 		return self.response('get', 'content', {'group': group, 'messages': messages})
 
@@ -47,6 +47,14 @@ class Model:
 		}).inserted_id
 
 		return self.response('post', 'message', self.db.messages.find_one(pk))
+
+
+	def joinPerson(self, dic):
+		personId = dic.pop('personId')
+		person = self.db.persons.find_one(ObjectId(personId))
+		dic['person'] = person
+
+		return dic
 
 
 	def response(self, method, action, body):
