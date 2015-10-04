@@ -32,9 +32,9 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
     return $filter('date')(date, 'MM/dd HH:mm:ss');
   };
 
-  $scope.personId = '1';
   $scope.groups = [];
   $scope.content = {};
+  $scope.subcontent = {};
 
 	$scope.socket = $websocket('ws://localhost:8080/ws');
 
@@ -46,11 +46,19 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
         $scope.groups = json.body;
       if (json.action === 'content')
         $scope.content = json.body;
+      if (json.action === 'attendances') {
+        $scope.subcontent.schedule = json.body.schedule;
+        $scope.subcontent.attendances = json.body.attendances;
+      }
     }
 
     if (json.method === 'post') {
-      if (json.action === 'message' && $scope.content.group._id.$oid === json.body.groupId)
+      if (json.action === 'message' && isCurrentGroup($scope, json))
         $scope.content.messages.push(json.body);
+      if (json.action === 'schedule' && isCurrentGroup($scope, json))
+        $scope.content.schedules.push(json.body);
+      if (json.action === 'attendance' && isCurrentAttendance($scope, json))
+        $scope.subcontent.attendances.push(json.body);
     }
   });
 
@@ -78,13 +86,32 @@ angular.module('App', ['ngWebSocket', 'ngRoute'])
 
   $scope.send('get', 'content', {groupId: $routeParams.groupId});
 
-  $scope.post = function(form) {
+  $scope.post = function(form, day, place, note) {
+    $scope.send('post', 'schedule', {groupId: $scope.content.group._id.$oid, day: day, place: place, note: note});
+    form.day = '';
+    form.place = '';
+    form.note = '';
   };
 }])
 
 .controller('AttendanceController', ['$scope', '$routeParams', function($scope, $routeParams) {
   $scope.groupId = $routeParams.groupId;
 
-  $scope.post = function(form) {
+  $scope.send('get', 'attendances', {scheduleId: $routeParams.scheduleId});
+
+  $scope.post = function(form, choice, note) {
+    $scope.send('post', 'attendance', {groupId: $scope.content.group._id.$oid, choice: choice, note: note, scheduleId: $routeParams.scheduleId});
+    form.choice = '';
+    form.note = '';
   };
 }]);
+
+
+isCurrentGroup = function($scope, json) {
+  return $scope.content.group._id.$oid === json.body.groupId;
+};
+
+
+isCurrentAttendance = function($scope, json) {
+  return ($scope.subcontent.schedule !== undefined) && ($scope.subcontent.schedule._id.$oid === json.body.scheduleId);
+};

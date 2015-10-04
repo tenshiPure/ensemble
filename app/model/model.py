@@ -39,6 +39,14 @@ class Model:
 		return self.response('get', 'content', {'group': group, 'messages': messages, 'schedules': schedules})
 
 
+	def getAttendances(self):
+		scheduleId = self.request['scheduleId']
+		schedule = self.db.schedules.find_one({'_id': ObjectId(scheduleId)})
+		attendances = [self.joinPerson(attendance) for attendance in self.db.attendances.find({'scheduleId': scheduleId})]
+
+		return self.response('get', 'attendances', {'schedule': schedule, 'attendances': attendances})
+
+
 	def joinPerson(self, dic):
 		personId = dic.pop('personId')
 		person = self.db.persons.find_one(ObjectId(personId))
@@ -50,12 +58,38 @@ class Model:
 	def postMessage(self):
 		pk = self.db.messages.insert_one({
 			'body'    : self.request['body'],
+			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
 			'groupId' : self.request['groupId'],
-			'personId': self.personId,
-			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+			'personId': self.personId
 		}).inserted_id
 
 		return self.response('post', 'message', self.db.messages.find_one(pk))
+
+
+	def postSchedule(self):
+		pk = self.db.schedules.insert_one({
+			'day'     : self.request['day'],
+			'place'   : self.request['place'],
+			'note'    : self.request['note'],
+			'created' : datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+			'groupId' : self.request['groupId'],
+			'personId': self.personId
+		}).inserted_id
+
+		return self.response('post', 'schedule', self.db.schedules.find_one(pk))
+
+
+	def postAttendance(self):
+		pk = self.db.attendances.insert_one({
+			'choice'     : self.request['choice'],
+			'note'       : self.request['note'],
+			'created'    : datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+			'scheduleId' : self.request['scheduleId'],
+			'groupId'    : self.request['groupId'],
+			'personId'   : self.personId
+		}).inserted_id
+
+		return self.response('post', 'attendance', self.db.attendances.find_one(pk))
 
 
 	def response(self, method, action, body):

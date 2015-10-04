@@ -5,13 +5,17 @@
 
   <div ng-include="'include?name=tab'" class="clearfix"></div>
 
-  <form class="contents-form" name="form" novalidate ng-submit="post(this)">
+  <p>{{! subcontent.schedule.day }}</p>
+
+  <form class="contents-form" name="form" novalidate ng-submit="post(this, choice, note)">
+    <input type="text" name="chocie" ng-model="choice" required placeholder="回答（必須）">
+    <input type="text" name="note"   ng-model="note"            placeholder="一言">
     <input type="submit" value="send" ng-disabled="form.$invalid">
   </form>
 
   <ul>
-    <li ng-repeat="attendance in content.attendances">
-      <pre>{{! attendance|json }}</pre>
+    <li ng-repeat="attendance in subcontent.attendances">
+      <pre>{{! attendance.person.name }}: {{! attendance.choice }} {{! attendance.note }}</pre>
     </li>
   </ul>
 </div>
