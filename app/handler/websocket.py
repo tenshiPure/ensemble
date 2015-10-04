@@ -2,20 +2,21 @@ import tornado.websocket
 
 from bson.json_util import loads
 
-from clients import Clients
 from model.model import Model
 
 
-clients = Clients()
+clients = []
 
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
 	def open(self):
-		clients.append(self)
+		if self not in clients:
+			clients.append(self)
 
 
 	def on_close(self):
-		clients.remove(self)
+		if self in clients:
+			clients.remove(self)
 
 
 	def on_message(self, request):
@@ -27,4 +28,4 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 		if loads(request)['method'] == 'get':
 			self.write_message(response)
 		else:
-			clients.send(response)
+			[client.write_message(response) for client in clients]
